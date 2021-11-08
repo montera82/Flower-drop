@@ -1,10 +1,17 @@
+import React from 'react';
+import Header from './Components/Header';
+import Gallery from './Components/Gallery';
+import Footer from './Components/Footer';
+
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <p>Welcome</p>
-    </div>
+    <React.Fragment>
+      <Header />
+      <Gallery />
+      <Footer />
+    </React.Fragment>
   );
 }
 
