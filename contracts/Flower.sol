@@ -1,16 +1,20 @@
 pragma solidity ^0.8.0;
 
 import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "../node_modules/openzeppelin-solidity/contracts/access/Ownable.sol";
+
+// import "../node_modules/openzeppelin-solidity/contracts/utils/Counters.sol";
 
 // Reference contract line 1301
 // https://etherscan.io/address/0xa4631a191044096834ce65d1ee86b16b171d8080#code
-contract Flower is ERC721Enumerable {
+contract Flower is ERC721Enumerable, Ownable {
     string public baseURI;
 
-    address BuildABetterFutureContract =
-        0xA509542aDa3196a38bD6fD03b253547EE09220C4;
-    address TimePieceCommunityContract =
-        0xABa7902442c5739c6f0c182691d48D63d06A212E;
+    // 1 of 1 collectors
+    // local account 3: 0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef
+
+    // non collectors
+    // local account 4: 0x821aEa9a577a9b44299B9c15c88cf3087F3b5544
 
     // build a better future contract address aka (Safe Haven)
     // local contract address: 0xA509542aDa3196a38bD6fD03b253547EE09220C4
@@ -26,38 +30,76 @@ contract Flower is ERC721Enumerable {
     // RinkebyAccount2 : 0x57A37fC8651b972A1b86dF328598d6d9609d6e09
     // TokenID : https://opensea.io/assets/0x9307edc4f23d87f9783a999f870b728ab9d34fe5/4251
 
-    // non-collector address empty map
+    // Contract or mappings reference
+    mapping(address => bool) oneOfOneCollectors;
+
     mapping(address => bool) nonCollectors;
+
+    address BuildABetterFutureContract =
+        0xA509542aDa3196a38bD6fD03b253547EE09220C4;
+    address TimePieceCommunityContract =
+        0xABa7902442c5739c6f0c182691d48D63d06A212E;
+
+    // mintList
+    mapping(address => bool) oneOfOneMintList;
+    mapping(address => bool) nonCollectorsMintList;
+    mapping(address => bool) openEditionCollectorsMintList;
+
+    // counters
+    // tokenIds 1 to 14
+    uint256 private oneOfOneMintedCount = 1;
+
+    // tokenIds 15 to 24
+    uint256 private nonCollectorsMintedCount = 15;
+
+    // tokenIds 25 to ..
+    uint256 private openEditionCollectorsMintedCount = 0;
+
+    bool private mintOpen = false;
+
+    modifier whenMintOpened() {
+        require(mintOpen == true, "Mint is not yet open");
+        _;
+    }
 
     constructor(string memory _initBaseURI) ERC721("Flowers", "FLW") {
         setBaseURI(_initBaseURI);
 
+        // define one-of-one-collectors
+        // TOdo: fill here with the address from the sheet
+        oneOfOneCollectors[0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef] = true;
+
         // define non-collectors
-        nonCollectors[0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef] = true;
+        nonCollectors[0x821aEa9a577a9b44299B9c15c88cf3087F3b5544] = true;
     }
 
     function _baseURI() internal view virtual override returns (string memory) {
         return baseURI;
     }
 
-    function setBaseURI(string memory newURI) public {
+    function setBaseURI(string memory newURI) public onlyOwner {
         baseURI = newURI;
     }
 
-    // function to determine if sender is is1Of1Holder
+    function setMintOpen(bool value) external onlyOwner {
+        require(mintOpen != value, "mintOpen already this value");
+        mintOpen = value;
+    }
 
-    // check that mint is open
-    // check that user has not previously minted. require(mintList[_wallet]=false)
+    // function to determine if sender is is1Of1Holder
+    function isOneOfOneCollector(address _wallet) public view returns (bool) {
+        return oneOfOneCollectors[_wallet];
+    }
 
     // function to determine if sender is non-collector hodler
-    function isNonCollector(address _wallet) external view returns (bool) {
+    function isNonCollector(address _wallet) public view returns (bool) {
         return nonCollectors[_wallet];
     }
 
     // function to determine if sender is open-edition collector
     // open edition collector = holderOfTimePieceCommunity or holderOfBuildABetterFuture
     function isOpenEditionCollector(address _wallet)
-        external
+        public
         view
         returns (bool isHolder)
     {
@@ -74,17 +116,72 @@ contract Flower is ERC721Enumerable {
         return isHolder;
     }
 
-    // function to allow is1Of1Holder mint
+    // function to allow 1 of 1 holder collector mint
+    function mint1Of1Holder(address _wallet) external whenMintOpened {
+        require(
+            oneOfOneMintList[_wallet],
+            "Wallet already minted before for this category"
+        );
+        require(
+            isOneOfOneCollector(_wallet) == true,
+            "Wallet must be an open edition collector"
+        );
+        // this condition should actually never be triggered, but having it here incase
+        // might remove later to save compiled code space.
+        require(
+            oneOfOneMintedCount <= 14,
+            "INTERNAL ERROR: Reached max tokens allowed for this category"
+        );
 
-    // function to non-collector mint
-    function mintForNonCollector() external pure {}
+        _safeMint(_wallet, oneOfOneMintedCount);
+
+        oneOfOneMintList[_wallet] = true;
+        oneOfOneMintedCount += 1;
+    }
+
+    // function to allow non-collector mint
+    function mintNonCollector(address _wallet) external whenMintOpened {
+        require(
+            nonCollectorsMintList[_wallet],
+            "Wallet already minted before for this category"
+        );
+        require(
+            isNonCollector(_wallet) == true,
+            "Wallet must be part of the non-collector list"
+        );
+
+        // this condition should actually never be triggered, but having it here incase
+        // might remove later to save compiled code space.
+        require(
+            nonCollectorsMintedCount <= 24,
+            "INTERNAL ERROR: Reached max tokens allowed for this category"
+        );
+        _safeMint(_wallet, nonCollectorsMintedCount);
+
+        nonCollectorsMintList[_wallet] = true;
+        nonCollectorsMintedCount += 1;
+    }
 
     // function to allow open-edition collector mint
+    function mintOpenEdition(address _wallet) external whenMintOpened {
+        require(
+            openEditionCollectorsMintList[_wallet],
+            "Wallet already minted before for this category"
+        );
+        require(
+            isOpenEditionCollector(_wallet) == true,
+            "Wallet must be an open edition collector"
+        );
+
+        // ToDO : add hard limit for total supply
+        _safeMint(_wallet, openEditionCollectorsMintedCount);
+
+        openEditionCollectorsMintList[_wallet] = true;
+        openEditionCollectorsMintedCount += 1;
+    }
 
     // function to bulk add non-collector addresses to a map - hmm, this will cost gas to do
     // function to add single non-collector address to a map - hmm, this will cost gass to do
 
     // function to remove non-collector address from a map
-
-    // function to setMint to be opened
 }
