@@ -3,8 +3,6 @@ pragma solidity ^0.8.0;
 import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "../node_modules/openzeppelin-solidity/contracts/access/Ownable.sol";
 
-// import "../node_modules/openzeppelin-solidity/contracts/utils/Counters.sol";
-
 // Reference contract line 1301
 // https://etherscan.io/address/0xa4631a191044096834ce65d1ee86b16b171d8080#code
 contract Flower is ERC721Enumerable, Ownable {
@@ -35,15 +33,13 @@ contract Flower is ERC721Enumerable, Ownable {
 
     mapping(address => bool) nonCollectors;
 
-    address BuildABetterFutureContract =
-        0xA509542aDa3196a38bD6fD03b253547EE09220C4;
-    address TimePieceCommunityContract =
-        0xABa7902442c5739c6f0c182691d48D63d06A212E;
+    address BuildABetterFutureContract;
+    address TimePieceCommunityContract;
 
     // mintList
-    mapping(address => bool) oneOfOneMintList;
-    mapping(address => bool) nonCollectorsMintList;
-    mapping(address => bool) openEditionCollectorsMintList;
+    mapping(address => bool) public oneOfOneMintList;
+    mapping(address => bool) public nonCollectorsMintList;
+    mapping(address => bool) public openEditionCollectorsMintList;
 
     // counters
     // tokenIds 1 to 14
@@ -53,7 +49,7 @@ contract Flower is ERC721Enumerable, Ownable {
     uint256 private nonCollectorsMintedCount = 15;
 
     // tokenIds 25 to ..
-    uint256 private openEditionCollectorsMintedCount = 0;
+    uint256 public openEditionCollectorsMintedCount = 0;
 
     bool private mintOpen = false;
 
@@ -62,8 +58,15 @@ contract Flower is ERC721Enumerable, Ownable {
         _;
     }
 
-    constructor(string memory _initBaseURI) ERC721("Flowers", "FLW") {
+    constructor(
+        string memory _initBaseURI,
+        address buildABetterFutureContract,
+        address timePieceCommunityContract
+    ) ERC721("Flowers", "FLW") {
         setBaseURI(_initBaseURI);
+
+        BuildABetterFutureContract = buildABetterFutureContract;
+        TimePieceCommunityContract = timePieceCommunityContract;
 
         // define one-of-one-collectors
         // TOdo: fill here with the address from the sheet
@@ -165,7 +168,7 @@ contract Flower is ERC721Enumerable, Ownable {
     // function to allow open-edition collector mint
     function mintOpenEdition(address _wallet) external whenMintOpened {
         require(
-            openEditionCollectorsMintList[_wallet],
+            openEditionCollectorsMintList[_wallet] == false,
             "Wallet already minted before for this category"
         );
         require(
