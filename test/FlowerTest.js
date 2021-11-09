@@ -13,8 +13,6 @@ contract("Flower", (accounts) => {
         beforeEach(async () => {
             this.buildABetterFutureContract = await ERC721Enummerable.new("", "");
             this.timePieceCommunityContract = await ERC721Enummerable.new("", "");
-
-            console.log("ddddd",this.buildABetterFutureContract.address)
             this.contract = await Flower.new(
                 baseURI, this.buildABetterFutureContract.address,
                 this.timePieceCommunityContract.address
