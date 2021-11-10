@@ -122,7 +122,7 @@ contract Flower is ERC721Enumerable, Ownable {
     // function to allow 1 of 1 holder collector mint
     function mint1Of1Holder(address _wallet) external whenMintOpened {
         require(
-            oneOfOneMintList[_wallet],
+            oneOfOneMintList[_wallet] == false,
             "Wallet already minted before for this category"
         );
         require(
@@ -145,7 +145,7 @@ contract Flower is ERC721Enumerable, Ownable {
     // function to allow non-collector mint
     function mintNonCollector(address _wallet) external whenMintOpened {
         require(
-            nonCollectorsMintList[_wallet],
+            nonCollectorsMintList[_wallet] == false,
             "Wallet already minted before for this category"
         );
         require(
