@@ -136,10 +136,13 @@ contract Flower is ERC721Enumerable, Ownable {
             "INTERNAL ERROR: Reached max tokens allowed for this category"
         );
 
-        _safeMint(_wallet, oneOfOneMintedCount);
+        uint256 tokenId = oneOfOneMintedCount;
+        _safeMint(_wallet, tokenId);
 
         oneOfOneMintList[_wallet] = true;
         oneOfOneMintedCount += 1;
+
+        emit LogMintOneOfOneHolder(_wallet, tokenId);
     }
 
     // function to allow non-collector mint
@@ -159,10 +162,14 @@ contract Flower is ERC721Enumerable, Ownable {
             nonCollectorsMintedCount <= 24,
             "INTERNAL ERROR: Reached max tokens allowed for this category"
         );
-        _safeMint(_wallet, nonCollectorsMintedCount);
+
+        uint256 tokenId = nonCollectorsMintedCount;
+        _safeMint(_wallet, tokenId);
 
         nonCollectorsMintList[_wallet] = true;
         nonCollectorsMintedCount += 1;
+
+        emit LogMintNonCollector(_wallet,  tokenId);
     }
 
     // function to allow open-edition collector mint
@@ -179,14 +186,22 @@ contract Flower is ERC721Enumerable, Ownable {
         // ToDO : add hard limit for total supply
         // Todod: store a mapping ( openEditionTOkenId => bool )
         
-        _safeMint(_wallet, openEditionCollectorsMintedCount);
+        uint256 tokenId = openEditionCollectorsMintedCount;
+        _safeMint(_wallet, tokenId);
 
         openEditionCollectorsMintList[_wallet] = true;
         openEditionCollectorsMintedCount += 1;
+
+        emit LogMintOpenEdition(_wallet,  tokenId);
     }
 
     // function to bulk add non-collector addresses to a map - hmm, this will cost gas to do
     // function to add single non-collector address to a map - hmm, this will cost gass to do
 
     // function to remove non-collector address from a map
+
+    // Events
+    event LogMintOneOfOneHolder(address indexed _address, uint256 _tokenId);
+    event LogMintNonCollector(address indexed _address, uint256 _tokenId);
+    event LogMintOpenEdition(address indexed _address, uint256 _tokenId);
 }
