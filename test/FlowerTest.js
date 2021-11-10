@@ -1,18 +1,21 @@
 const Flower = artifacts.require("Flower");
-const ERC721Enummerable = artifacts.require("EdwinTopEstateERC721Token");
+const fs = require('fs');
+const abi = require("../scripts/EdwinTopEstateERC721Token.json");
+const Contract = require("@truffle/contract");
 
 contract("Flower", (accounts) => {
-
     const baseURI = "https://foo.com/";
-    const buildABetterFutureContract =
-        "0xA509542aDa3196a38bD6fD03b253547EE09220C4";
-    const timePieceCommunityContract =
-        "0xABa7902442c5739c6f0c182691d48D63d06A212E";
+    
+    // because we are referencing this contract from another directory other than the configured
+    // artifact directory, we no longer access to defaults from Truffle.
+    const MockERC721Token =  Contract(abi);
+    MockERC721Token.setProvider(new web3.providers.HttpProvider("http://localhost:7545"));
+    MockERC721Token.defaults({from: accounts[0] });
 
     describe("Test flower", () => {
         beforeEach(async () => {
-            this.buildABetterFutureContract = await ERC721Enummerable.new("", "");
-            this.timePieceCommunityContract = await ERC721Enummerable.new("", "");
+            this.buildABetterFutureContract = await MockERC721Token.new("", "");
+            this.timePieceCommunityContract = await MockERC721Token.new("", "");
             this.contract = await Flower.new(
                 baseURI, this.buildABetterFutureContract.address,
                 this.timePieceCommunityContract.address
@@ -35,7 +38,7 @@ contract("Flower", (accounts) => {
             const tokenId1 = 1;
             const tokenId2 = 2;
 
-            await this.buildABetterFutureContract.mint(accounts[0], tokenId1)
+            await this.buildABetterFutureContract.mint(accounts[0], tokenId1, { from: accounts[0]})
             await this.timePieceCommunityContract.mint(accounts[1], tokenId2)
 
             const result1 = await this.contract.isOpenEditionCollector(accounts[0]);
@@ -73,7 +76,6 @@ contract("Flower", (accounts) => {
             
             assert.equal(isInList1, true, "address should be in list");
             assert.equal(isInList2, true, "address should be in list");
-            assert.equal(openEditionCollectorsMintedCount, 2, "total minted token count should be 2")
         })
 
         it("should fail to mintOpenEdition for a non OpenEdition account", async () => {

@@ -49,7 +49,7 @@ contract Flower is ERC721Enumerable, Ownable {
     uint256 private nonCollectorsMintedCount = 15;
 
     // tokenIds 25 to ..
-    uint256 public openEditionCollectorsMintedCount = 0;
+    uint256 public openEditionCollectorsMintedCount = 25;
 
     bool private mintOpen = false;
 
@@ -177,6 +177,8 @@ contract Flower is ERC721Enumerable, Ownable {
         );
 
         // ToDO : add hard limit for total supply
+        // Todod: store a mapping ( openEditionTOkenId => bool )
+        
         _safeMint(_wallet, openEditionCollectorsMintedCount);
 
         openEditionCollectorsMintList[_wallet] = true;
