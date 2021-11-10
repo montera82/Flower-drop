@@ -2,7 +2,25 @@ import React, { createContext, useReducer } from 'react';
 
 const initialContext = {
   account: null,
-  setAccount: () => {}
+  setAccount: () => {},
+  mintingOneOfOne: false,
+  setMintingOneOfOne: () => {},
+  mintingNonCollector: false,
+  setMintingNonCollector: () => {},
+  mintingOpenEdition: false,
+  setMintingOpenEdition: () => {},
+  isOneOfOneCollector: false,
+  setIsOneOfOneCollector: () => {},
+  isNonCollector: false,
+  setIsNonCollector: () => {},
+  isOpenEditionCollector: false,
+  setIsOpenEditionCollector: () => {},
+  hasMintedOneOfOneCollection: false,
+  setHasMintedOneOfOneCollection: () => {},
+  hasMintedNonCollection: false,
+  setHasMintedNonCollection: () => {},
+  hasMintedOpenEditionCollection: false,
+  setHasMintedOpenEditionCollection: () => {}
 };
 
 const appReducer = (state, { type, payload }) => {
@@ -11,6 +29,52 @@ const appReducer = (state, { type, payload }) => {
       return {
         ...state,
         account: payload
+      };
+    case 'SET_MINTING_ONE_OF_ONE':
+      return {
+        ...state,
+        mintingOneOfOne: payload
+      };
+    case 'SET_MINTING_NON_COLLECTOR':
+      return {
+        ...state,
+        mintingNonCollector: payload
+      };
+    case 'SET_MINTING_OPEN_EDITION':
+      return {
+        ...state,
+        mintingOpenEdition: payload
+      };
+    case 'SET_IS_ONE_OF_ONE_COLLECTOR':
+      return {
+        ...state,
+        isOneOfOneCollector: payload
+      };
+    case 'SET_IS_NON_COLLECTOR':
+      return {
+        ...state,
+        isNonCollector: payload
+      };
+    case 'SET_IS_OPEN_EDITION_COLLECTOR':
+      return {
+        ...state,
+        isOpenEditionCollector: payload
+      };
+
+    case 'SET_HAS_MINTED_ONE_OF_ONE_COLLECTION':
+      return {
+        ...state,
+        hasMintedOneOfOneCollection: payload
+      };
+    case 'SET_HAS_MINTED_NON_COLLECTION':
+      return {
+        ...state,
+        hasMintedNonCollection: payload
+      };
+    case 'SET_HAS_MINTED_OPEN_EDITION_COLLECTION':
+      return {
+        ...state,
+        hasMintedOpenEditionCollection: payload
       };
 
     default:
@@ -28,6 +92,42 @@ export const AppContextProvider = ({ children }) => {
     account: store.account,
     setAccount: (account) => {
       dispatch({ type: 'SET_ACCOUNT', payload: account });
+    },
+    mintingOneOfOne: store.mintingOneOfOne,
+    setMintingOneOfOne: (result) => {
+      dispatch({ type: 'SET_MINTING_ONE_OF_ONE', payload: result });
+    },
+    mintingNonCollector: store.mintingNonCollector,
+    setMintingNonCollector: (result) => {
+      dispatch({ type: 'SET_MINTING_NON_COLLECTOR', payload: result });
+    },
+    mintingOpenEdition: store.mintingOpenEdition,
+    setMintingOpenEdition: (result) => {
+      dispatch({ type: 'SET_MINTING_OPEN_EDITION', payload: result });
+    },
+    isOneOfOneCollector: store.isOneOfOneCollector,
+    setIsOneOfOneCollector: (result) => {
+      dispatch({ type: 'SET_IS_ONE_OF_ONE_COLLECTOR', payload: result });
+    },
+    isNonCollector: store.isNonCollector,
+    setIsNonCollector: (result) => {
+      dispatch({ type: 'SET_IS_NON_COLLECTOR', payload: result });
+    },
+    isOpenEditionCollector: store.isOpenEditionCollector,
+    setIsOpenEditionCollector: (result) => {
+      dispatch({ type: 'SET_IS_OPEN_EDITION_COLLECTOR', payload: result });
+    },
+    hasMintedOneOfOneCollection: store.hasMintedOneOfOneCollection,
+    setHasMintedOneOfOneCollection: (result) => {
+      dispatch({ type: 'SET_HAS_MINTED_ONE_OF_ONE_COLLECTION', payload: result });
+    },
+    hasMintedNonCollection: store.hasMintedNonCollection,
+    setHasMintedNonCollection: (result) => {
+      dispatch({ type: 'SET_HAS_MINTED_NON_COLLECTION', payload: result });
+    },
+    hasMintedOpenEditionCollection: store.hasMintedOpenEditionCollection,
+    setHasMintedOpenEditionCollection: (result) => {
+      dispatch({ type: 'SET_HAS_MINTED_OPEN_EDITION_COLLECTION', payload: result });
     }
   };
 

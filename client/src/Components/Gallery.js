@@ -1,6 +1,57 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useAppContext } from '../AppContext';
+import { useFlower } from '../hooks/useFlower';
 
 export default function Gallery() {
+  const { account } = useAppContext();
+  const {
+    mintingOneOfOne,
+    mintingNonCollector,
+    mintingOpenEdition,
+    isOneOfOneCollector,
+    isNonCollector,
+    isOpenEditionCollector,
+    hasMintedOneOfOneCollection,
+    hasMintedNonCollection,
+    hasMintedOpenEditionCollection,
+    fetchIsOneOfOneCollector,
+    fetchIsNonCollector,
+    // fetchIsOpenEditionCollector,
+    fetchHasMintedOneOfOneCollection,
+    fetchHasMintedNonCollection,
+    // fetchHasMintedOpenEditionCollection,
+    mintOneOfOneCollection,
+    mintNonCollectorCollection,
+    mintOpenEditionCollection
+  } = useFlower();
+
+  const mintOneOfOne = (e) => {
+    e.preventDefault();
+    mintOneOfOneCollection(account);
+  };
+
+  const mintNonCollector = (e) => {
+    e.preventDefault();
+    mintNonCollectorCollection(account);
+  };
+
+  const mintOpenEdition = (e) => {
+    e.preventDefault();
+    mintOpenEditionCollection(account);
+  };
+
+  // TODO: TRACK CHAIN ID CHANGE TOO
+  useEffect(() => {
+    if (account) {
+      fetchIsOneOfOneCollector(account);
+      fetchIsNonCollector(account);
+      // fetchIsOpenEditionCollector(account);
+      fetchHasMintedOneOfOneCollection(account);
+      fetchHasMintedNonCollection(account);
+      // fetchHasMintedOpenEditionCollection(account);
+    }
+  }, [account]);
+
   return (
     <React.Fragment>
       <div className="basic-slider slider-Akel">
@@ -13,82 +64,108 @@ export default function Gallery() {
       </div>
       <div className="basic-portfolio-area ptb-90">
         <div className="container">
-          <div className="filter-menu text-center mb-40">
-            <button className="active" data-filter="*">
-              ALL
-            </button>
-            <button data-filter=".branding">Branding</button>
-            <button data-filter=".graphic">Graphic</button>
-            <button data-filter=".design">Design</button>
-            <button data-filter=".video">Video</button>
-          </div>
           <div id="portfolio-grid" className="row-portfolio portfolio-style-2">
-            <div className="portfolio-item branding video">
-              <div className="portfolio-wrapper">
-                <div className="portfolio-thumb">
-                  <img src="img/portfolio/project1.jpg" alt="" />
-                  <div className="view-icon">
-                    <a href="portfolio-single.html">
-                      <i className="ion-arrow-right-c"></i>
-                    </a>
+            {isOneOfOneCollector ? (
+              <div className="portfolio-item branding video">
+                <div className="portfolio-wrapper">
+                  <div className="portfolio-thumb">
+                    <img src="img/portfolio/project1.jpg" alt="" />
+                    <div className="view-icon">
+                      <a href="portfolio-single.html">
+                        <i className="ion-arrow-right-c"></i>
+                      </a>
+                    </div>
+                  </div>
+                  <div className="portfolio-caption text-left">
+                    <div className="work-tag">
+                      <p>Flower 1</p>
+                    </div>
+                    <h4>
+                      <a href="portfolio-single.html">One of One Collectors</a>
+                    </h4>
                   </div>
                 </div>
-                <div className="portfolio-caption text-left">
-                  <div className="work-tag">
-                    <p>Web Design</p>
-                  </div>
-                  <h4>
-                    <a href="portfolio-single.html">Brand Redesign Works</a>
-                  </h4>
-                </div>
-              </div>
-            </div>
-            <div className="portfolio-item branding video">
-              <div className="portfolio-wrapper">
-                <div className="portfolio-thumb">
-                  <img src="img/portfolio/project1.jpg" alt="" />
-                  <div className="view-icon">
-                    <a href="portfolio-single.html">
-                      <i className="ion-arrow-right-c"></i>
-                    </a>
-                  </div>
-                </div>
-                <div className="portfolio-caption text-left">
-                  <div className="work-tag">
-                    <p>Web Design</p>
-                  </div>
-                  <h4>
-                    <a href="portfolio-single.html">Brand Redesign Works</a>
-                  </h4>
-                </div>
-              </div>
-            </div>
-            <div className="portfolio-item branding video">
-              <div className="portfolio-wrapper">
-                <div className="portfolio-thumb">
-                  <img src="img/portfolio/project1.jpg" alt="" />
-                  <div className="view-icon">
-                    <a href="portfolio-single.html">
-                      <i className="ion-arrow-right-c"></i>
-                    </a>
-                  </div>
-                </div>
-                <div className="portfolio-caption text-left">
-                  <div className="work-tag">
-                    <p>Web Design</p>
-                  </div>
-                  <h4>
-                    <a href="portfolio-single.html">Brand Redesign Works</a>
-                  </h4>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div className="view-more mt-20 text-center">
-            <a className="btn btn-large" href="#">
-              View More
-            </a>
+                {!hasMintedOneOfOneCollection ? (
+                  <div className="view-more mt-20 text-center">
+                    <a onClick={mintOneOfOne} className="btn btn-large">
+                      {mintingOneOfOne ? 'Minting...' : 'Mint'}
+                    </a>
+                  </div>
+                ) : (
+                  ''
+                )}
+              </div>
+            ) : (
+              ''
+            )}
+            {isNonCollector ? (
+              <div className="portfolio-item branding video">
+                <div className="portfolio-wrapper">
+                  <div className="portfolio-thumb">
+                    <img src="img/portfolio/project1.jpg" alt="" />
+                    <div className="view-icon">
+                      <a href="portfolio-single.html">
+                        <i className="ion-arrow-right-c"></i>
+                      </a>
+                    </div>
+                  </div>
+                  <div className="portfolio-caption text-left">
+                    <div className="work-tag">
+                      <p>Flower 2</p>
+                    </div>
+                    <h4>
+                      <a href="portfolio-single.html">Non Collectors</a>
+                    </h4>
+                  </div>
+                </div>
+
+                {!hasMintedNonCollection ? (
+                  <div className="view-more mt-20 text-center">
+                    <a onClick={mintNonCollector} className="btn btn-large" href="#">
+                      {mintingNonCollector ? 'Minting...' : 'Mint'}
+                    </a>
+                  </div>
+                ) : (
+                  ''
+                )}
+              </div>
+            ) : (
+              ''
+            )}
+            {isOpenEditionCollector ? (
+              <div className="portfolio-item branding video">
+                <div className="portfolio-wrapper">
+                  <div className="portfolio-thumb">
+                    <img src="img/portfolio/project1.jpg" alt="" />
+                    <div className="view-icon">
+                      <a href="portfolio-single.html">
+                        <i className="ion-arrow-right-c"></i>
+                      </a>
+                    </div>
+                  </div>
+                  <div className="portfolio-caption text-left">
+                    <div className="work-tag">
+                      <p>Flower 3</p>
+                    </div>
+                    <h4>
+                      <a href="portfolio-single.html">Open Edition Collectors</a>
+                    </h4>
+                  </div>
+                </div>
+                {!hasMintedOpenEditionCollection ? (
+                  <div className="view-more mt-20 text-center">
+                    <a onClick={mintOpenEdition} className="btn btn-large" href="#">
+                      {mintingOpenEdition ? 'Minting...' : 'Mint'}
+                    </a>
+                  </div>
+                ) : (
+                  ''
+                )}
+              </div>
+            ) : (
+              ''
+            )}
           </div>
         </div>
       </div>

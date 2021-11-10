@@ -1,17 +1,9 @@
 import { useEffect } from 'react';
-// import { ethers } from 'ethers';
-// import { parseEther, formatEther } from '@ethersproject/units';
 import { shortenAddress } from '../utils/shortenAddress';
 import { useAppContext } from '../AppContext';
 
 export default function Header() {
   const { account, setAccount } = useAppContext();
-  // async function initializeProvider() {
-  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //   const signer = provider.getSigner();
-  //   return signer;
-  //   // return new ethers.Contract(AuctionContractAddress, Auction.abi, signer);
-  // }
 
   async function connectWallet(e) {
     e.preventDefault();
@@ -20,13 +12,13 @@ export default function Header() {
     localStorage.setItem('accountData', JSON.stringify({ account: account[0] }));
   }
 
+  // Listen for account change event and clear local storage
   window.ethereum.on('accountsChanged', (account) => {
     const newAccount = account[0] || null;
     setAccount(newAccount);
     localStorage.setItem('accountData', JSON.stringify({ account: newAccount }));
   });
 
-  // const { account, setAccount } = useAppContext();
   useEffect(() => {
     const accountData = JSON.parse(localStorage.getItem('accountData'));
     accountData && setAccount(accountData.account);

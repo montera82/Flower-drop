@@ -1,6 +1,6 @@
-import Header from './Components/Header';
-import Gallery from './Components/Gallery';
-import Footer from './Components/Footer';
+import Header from './components/Header';
+import Gallery from './components/Gallery';
+import Footer from './components/Footer';
 import { AppContextProvider } from './AppContext';
 
 import './App.css';

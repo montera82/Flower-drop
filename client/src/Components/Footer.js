@@ -22,30 +22,9 @@ export default function Footer() {
               <i className="ion-social-dribbble"></i>
             </a>
           </div>
-          <div className="footer-menu mt-30">
-            <nav>
-              <ul>
-                <li>
-                  <a href="#">Home</a>
-                </li>
-                <li>
-                  <a href="#">Portfolio</a>
-                </li>
-                <li>
-                  <a href="#">About</a>
-                </li>
-                <li>
-                  <a href="#">Blog</a>
-                </li>
-                <li>
-                  <a href="#">Contact</a>
-                </li>
-              </ul>
-            </nav>
-          </div>
           <div className="copyright mt-20">
             <p>
-              All copyright © reserved by <a href="#">ThemePure</a> 2018
+              All copyright © reserved by <a href="#">Lethabo Huma</a> 2021
             </p>
           </div>
         </div>
