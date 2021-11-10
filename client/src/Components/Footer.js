@@ -5,7 +5,7 @@ export default function Footer() {
         <div className="container">
           <div className="footer-logo mb-30">
             <h3>
-              <a href="index.html">Akel</a>
+              <a href="index.html">FINAL DROP – LETHABO HUMA</a>
             </h3>
           </div>
           <div className="social-icon">
