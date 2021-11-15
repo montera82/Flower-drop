@@ -24,7 +24,7 @@ export const useFlower = () => {
     setHasMintedOpenEditionCollection
   } = useAppContext();
 
-  const flowerContractAddress = '0x9DBFA28F0540CBFdd7B7b2100d03f846af933f56'; // Ganache
+  const flowerContractAddress = '0xde1B91f4bB6DD5722380E9fCcA4531C2CfaCBa23'; // Ganache
   const flowerContract = useContract(flowerContractAddress, Flower.abi);
 
   const fetchIsOneOfOneCollector = async (address) => {

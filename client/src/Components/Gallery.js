@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useAppContext } from '../AppContext';
 import { useFlower } from '../hooks/useFlower';
+import Alert from './Alert';
 
 export default function Gallery() {
   const { account } = useAppContext();
@@ -40,7 +41,6 @@ export default function Gallery() {
     mintOpenEditionCollection(account);
   };
 
-  // TODO: TRACK CHAIN ID CHANGE TOO
   useEffect(() => {
     if (account) {
       fetchIsOneOfOneCollector(account);
@@ -54,9 +54,12 @@ export default function Gallery() {
 
   return (
     <React.Fragment>
-      <div className="basic-slider slider-Akel">
+      <div
+        style={{ paddingTop: '50px', paddingBottom: '140px' }}
+        className="basic-slider slider-Akel">
+        <Alert />
         <div className="container">
-          <div className="slider-content text-center">
+          <div style={{ paddingTop: '40px' }} className="slider-content text-center">
             <h3 className="mb-30">Simple is the best design</h3>
             <p>We are Professional web developer and designer in this market.</p>
           </div>
@@ -65,11 +68,16 @@ export default function Gallery() {
       <div className="basic-portfolio-area ptb-90">
         <div className="container">
           <div id="portfolio-grid" className="row-portfolio portfolio-style-2">
+            {!isOneOfOneCollector && !isNonCollector && !isOpenEditionCollector && (
+              <p style={{ fontWeight: 500, color: 'rgb(233 6 7)', textAlign: 'center' }}>
+                You&apos;re not eligible for this drop
+              </p>
+            )}
             {isOneOfOneCollector ? (
               <div className="portfolio-item branding video">
                 <div className="portfolio-wrapper">
                   <div className="portfolio-thumb">
-                    <img src="img/portfolio/project1.jpg" alt="" />
+                    <img src="img/portfolio/Flower 1 - 1_1 Collectors.png" alt="" />
                     <div className="view-icon">
                       <a href="portfolio-single.html">
                         <i className="ion-arrow-right-c"></i>
@@ -86,15 +94,23 @@ export default function Gallery() {
                   </div>
                 </div>
 
-                {!hasMintedOneOfOneCollection ? (
+                {
                   <div className="view-more mt-20 text-center">
-                    <a onClick={mintOneOfOne} className="btn btn-large">
-                      {mintingOneOfOne ? 'Minting...' : 'Mint'}
+                    <a
+                      style={{
+                        pointerEvents: hasMintedOneOfOneCollection ? 'none' : 'auto',
+                        background: hasMintedOneOfOneCollection ? 'rgb(188 188 188)' : '#444'
+                      }}
+                      onClick={mintOneOfOne}
+                      className="btn btn-large">
+                      {hasMintedOneOfOneCollection
+                        ? 'Claim'
+                        : mintingOneOfOne
+                        ? 'Claiming...'
+                        : 'Claim'}
                     </a>
                   </div>
-                ) : (
-                  ''
-                )}
+                }
               </div>
             ) : (
               ''
@@ -103,7 +119,7 @@ export default function Gallery() {
               <div className="portfolio-item branding video">
                 <div className="portfolio-wrapper">
                   <div className="portfolio-thumb">
-                    <img src="img/portfolio/project1.jpg" alt="" />
+                    <img src="img/portfolio/Flower 2 - Non-Collectors.png" alt="" />
                     <div className="view-icon">
                       <a href="portfolio-single.html">
                         <i className="ion-arrow-right-c"></i>
@@ -120,24 +136,32 @@ export default function Gallery() {
                   </div>
                 </div>
 
-                {!hasMintedNonCollection ? (
+                {
                   <div className="view-more mt-20 text-center">
-                    <a onClick={mintNonCollector} className="btn btn-large" href="#">
-                      {mintingNonCollector ? 'Minting...' : 'Mint'}
+                    <a
+                      style={{
+                        pointerEvents: hasMintedNonCollection ? 'none' : 'auto',
+                        background: hasMintedNonCollection ? 'rgb(188 188 188)' : '#444'
+                      }}
+                      onClick={mintNonCollector}
+                      className="btn btn-large">
+                      {hasMintedNonCollection
+                        ? 'Claimed'
+                        : mintingNonCollector
+                        ? 'Claiming...'
+                        : 'Claim'}
                     </a>
                   </div>
-                ) : (
-                  ''
-                )}
+                }
               </div>
             ) : (
               ''
             )}
-            {isOpenEditionCollector ? (
+            {isNonCollector ? (
               <div className="portfolio-item branding video">
                 <div className="portfolio-wrapper">
                   <div className="portfolio-thumb">
-                    <img src="img/portfolio/project1.jpg" alt="" />
+                    <img src="img/portfolio/Flower 3 - Open Edition Collectors .png" alt="" />
                     <div className="view-icon">
                       <a href="portfolio-single.html">
                         <i className="ion-arrow-right-c"></i>
@@ -153,15 +177,23 @@ export default function Gallery() {
                     </h4>
                   </div>
                 </div>
-                {!hasMintedOpenEditionCollection ? (
+                {
                   <div className="view-more mt-20 text-center">
-                    <a onClick={mintOpenEdition} className="btn btn-large" href="#">
-                      {mintingOpenEdition ? 'Minting...' : 'Mint'}
+                    <a
+                      style={{
+                        pointerEvents: hasMintedOpenEditionCollection ? 'none' : 'auto',
+                        background: hasMintedOpenEditionCollection ? 'rgb(188 188 188)' : '#444'
+                      }}
+                      onClick={mintOpenEdition}
+                      className="btn btn-large">
+                      {hasMintedOpenEditionCollection
+                        ? 'Claimed'
+                        : mintingOpenEdition
+                        ? 'Claiming...'
+                        : 'Claim'}
                     </a>
                   </div>
-                ) : (
-                  ''
-                )}
+                }
               </div>
             ) : (
               ''

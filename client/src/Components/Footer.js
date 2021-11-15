@@ -13,18 +13,20 @@ export default function Footer() {
               <i className="ion-social-facebook"></i>
             </a>
             <a href="#">
-              <i className="ion-social-googleplus"></i>
-            </a>
-            <a href="#">
               <i className="ion-social-instagram"></i>
             </a>
             <a href="#">
-              <i className="ion-social-dribbble"></i>
+              <i className="ion-social-twitter"></i>
             </a>
           </div>
           <div className="copyright mt-20">
             <p>
               All copyright © reserved by <a href="#">Lethabo Huma</a> 2021
+            </p>
+            <p>
+              Smart contract written and deployed by{' '}
+              <a href="https://twitter.com/Edwintops">Edwin</a> and{' '}
+              <a href="https://twitter.com/heydamali">Kingsley</a>
             </p>
           </div>
         </div>

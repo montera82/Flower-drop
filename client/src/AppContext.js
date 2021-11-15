@@ -1,8 +1,12 @@
 import React, { createContext, useReducer } from 'react';
 
 const initialContext = {
+  metaMaskInstalled: false,
+  setMetaMaskInstalled: () => {},
   account: null,
   setAccount: () => {},
+  chainId: null,
+  setChainId: () => {},
   mintingOneOfOne: false,
   setMintingOneOfOne: () => {},
   mintingNonCollector: false,
@@ -25,10 +29,20 @@ const initialContext = {
 
 const appReducer = (state, { type, payload }) => {
   switch (type) {
+    case 'SET_META_MASK_INSTALLED':
+      return {
+        ...state,
+        metaMaskInstalled: payload
+      };
     case 'SET_ACCOUNT':
       return {
         ...state,
         account: payload
+      };
+    case 'SET_CHAIN_ID':
+      return {
+        ...state,
+        chainId: payload
       };
     case 'SET_MINTING_ONE_OF_ONE':
       return {
@@ -89,9 +103,17 @@ export const AppContextProvider = ({ children }) => {
   const [store, dispatch] = useReducer(appReducer, initialContext);
 
   const contextValue = {
+    metaMaskInstalled: store.metaMaskInstalled,
+    setMetaMaskInstalled: (result) => {
+      dispatch({ type: 'SET_META_MASK_INSTALLED', payload: result });
+    },
     account: store.account,
     setAccount: (account) => {
       dispatch({ type: 'SET_ACCOUNT', payload: account });
+    },
+    chainId: store.chainId,
+    setChainId: (chainId) => {
+      dispatch({ type: 'SET_CHAIN_ID', payload: chainId });
     },
     mintingOneOfOne: store.mintingOneOfOne,
     setMintingOneOfOne: (result) => {
