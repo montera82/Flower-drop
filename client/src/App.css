@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+/* ALERT COMPONENT */
+.alert {
+  padding: 2px 15px;
+  border: 1px solid rgb(239 239 239);
+  color: rgb(136 136 136);
+  border-radius: 30px;
+  display: flex;
+  height: 50px;
+  align-items: center;
+  -webkit-box-align: center;
+  width: fit-content;
+  width: -moz-fit-content;
+  margin: 0 auto;
+}

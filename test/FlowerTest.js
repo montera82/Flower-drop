@@ -43,9 +43,13 @@ contract("Flower", (accounts) => {
 
             const result1 = await this.contract.isOpenEditionCollector(accounts[0]);
             const result2 = await this.contract.isOpenEditionCollector(accounts[1]);
-
+            const result3 = await this.contract.isOneOfOneCollector(accounts[1]);
+            const result4 = await this.contract.isOneOfOneCollector(accounts[3]);
+            console.log(result, '-------', accounts[0])
             assert.equal(result1, true, "Address should be returned as openCollector");
             assert.equal(result2, true, "Address should be returned as openCollector");
+            assert.equal(result3, true, "Address should be returned as oneOfOneCollector");
+            assert.equal(result4, false, "Address should not return as oneOfOneCollector");
         });
 
         it("should proplery determine if a wallet is a non-collector", async () => {

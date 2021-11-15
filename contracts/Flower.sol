@@ -51,7 +51,7 @@ contract Flower is ERC721Enumerable, Ownable {
     // tokenIds 25 to ..
     uint256 public openEditionCollectorsMintedCount = 25;
 
-    bool private mintOpen = false;
+    bool private mintOpen = true;
 
     modifier whenMintOpened() {
         require(mintOpen == true, "Mint is not yet open");
@@ -70,10 +70,11 @@ contract Flower is ERC721Enumerable, Ownable {
 
         // define one-of-one-collectors
         // TOdo: fill here with the address from the sheet
-        oneOfOneCollectors[0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef] = true;
+        oneOfOneCollectors[0x53C379A44018504059D01Ee3eB9645Cb115fD932] = true;
 
         // define non-collectors
         nonCollectors[0x821aEa9a577a9b44299B9c15c88cf3087F3b5544] = true;
+        nonCollectors[0x53C379A44018504059D01Ee3eB9645Cb115fD932] = true;
     }
 
     function _baseURI() internal view virtual override returns (string memory) {

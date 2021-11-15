@@ -1,36 +1,48 @@
 import { useEffect } from 'react';
-// import { ethers } from 'ethers';
-// import { parseEther, formatEther } from '@ethersproject/units';
 import { shortenAddress } from '../utils/shortenAddress';
 import { useAppContext } from '../AppContext';
 
 export default function Header() {
-  const { account, setAccount } = useAppContext();
-  // async function initializeProvider() {
-  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //   const signer = provider.getSigner();
-  //   return signer;
-  //   // return new ethers.Contract(AuctionContractAddress, Auction.abi, signer);
-  // }
+  const { account, metaMaskInstalled, setAccount, setChainId } = useAppContext();
 
   async function connectWallet(e) {
     e.preventDefault();
-    const account = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    setAccount(account[0]);
-    localStorage.setItem('accountData', JSON.stringify({ account: account[0] }));
+    try {
+      const account = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      setAccount(account[0]);
+      localStorage.setItem('accountData', JSON.stringify({ account: account[0] }));
+    } catch (e) {
+      window.alert('MetaMask not found');
+    }
   }
 
-  window.ethereum.on('accountsChanged', (account) => {
-    const newAccount = account[0] || null;
-    setAccount(newAccount);
-    localStorage.setItem('accountData', JSON.stringify({ account: newAccount }));
-  });
-
-  // const { account, setAccount } = useAppContext();
-  useEffect(() => {
+  useEffect(async () => {
     const accountData = JSON.parse(localStorage.getItem('accountData'));
     accountData && setAccount(accountData.account);
-  }, []);
+
+    if (metaMaskInstalled && account) {
+      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+      setChainId(chainId);
+
+      // Listen for account and chain change events
+      const handleAccountChange = (account) => {
+        const newAccount = account[0] || null;
+        setAccount(newAccount);
+        localStorage.setItem('accountData', JSON.stringify({ account: newAccount }));
+      };
+      const handleChainChange = () => {
+        window.location.reload();
+      };
+      window.ethereum.on('accountsChanged', handleAccountChange);
+      window.ethereum.on('chainChanged', handleChainChange);
+
+      // Remove listeners on component unmount
+      return function cleanupListener() {
+        window.ethereum.removeListener('accountsChanged', handleAccountChange);
+        window.ethereum.removeListener('chainChanged', handleChainChange);
+      };
+    }
+  }, [metaMaskInstalled, account]);
 
   return (
     <header id="sticky-header">
