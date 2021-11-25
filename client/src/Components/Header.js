@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { shortenAddress } from '../utils/shortenAddress';
 import { useAppContext } from '../AppContext';
 
 export default function Header() {
-  const { account, metaMaskInstalled, setAccount, setChainId } = useAppContext();
+  const { account, metaMaskInstalled, setAccount, setChainId, setShowModal } = useAppContext();
 
   async function connectWallet(e) {
     e.preventDefault();
@@ -11,6 +12,7 @@ export default function Header() {
       const account = await window.ethereum.request({ method: 'eth_requestAccounts' });
       setAccount(account[0]);
       localStorage.setItem('accountData', JSON.stringify({ account: account[0] }));
+      setShowModal(true);
     } catch (e) {
       window.alert('MetaMask not found');
     }
@@ -29,6 +31,9 @@ export default function Header() {
         const newAccount = account[0] || null;
         setAccount(newAccount);
         localStorage.setItem('accountData', JSON.stringify({ account: newAccount }));
+        setTimeout(() => {
+          setShowModal(true);
+        }, 2000);
       };
       const handleChainChange = () => {
         window.location.reload();
@@ -54,14 +59,14 @@ export default function Header() {
               className="col-sm-12">
               <div>
                 <li>
-                  <a style={{ fontWeight: 700 }} href="index.html">
+                  <Link to="/" style={{ fontWeight: 700 }}>
                     Home
-                  </a>
+                  </Link>
                 </li>
               </div>
               <div className="logo text-upper">
                 <h4>
-                  <a href="index.html">LETHABO HUMA</a>
+                  <a>LETHABO HUMA</a>
                 </h4>
               </div>
               <div className="basic-menu">

@@ -1,9 +1,16 @@
-import React, { useEffect } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useAppContext } from '../AppContext';
 import { useFlower } from '../hooks/useFlower';
 import Alert from './Alert';
 
+const text =
+  '<h5 className="mb-20">To Colin Goltra,</h5><p style="margin: 0 auto; max-width: 800px;">Thank you for being an early believer in my work, by collecting <b>&lsquo;Glory II&rsquo;</b>, you have contributed immensely in my life and I&rsquo;m eternally grateful. I&rsquo;d like to give you your flowers for also being a tremendous figure in the web3/Crypto space and I appreciate all you&rsquo;ve done for myself and many other artists. <br /> <br /> Love, Lethabo Huma <br /></p>';
+
 export default function Gallery() {
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+  const [emailMessage, setEmailMessage] = useState('');
   const { account } = useAppContext();
   const {
     mintingOneOfOne,
@@ -41,6 +48,34 @@ export default function Gallery() {
     mintOpenEditionCollection(account);
   };
 
+  const submitEmail = (e) => {
+    e.preventDefault();
+    if (email.length === 0) {
+      setError('Please enter a valid email');
+      return;
+    }
+    try {
+      axios.post(
+        'https://flowerdrop-1861.restdb.io/rest/email',
+        {
+          email: email
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'x-apikey': '6195739dfc71545b0f5e08dc', // TODO: add to env
+            'cache-control': 'no-cache'
+          }
+        }
+      );
+      setEmail('');
+      setError('');
+      setEmailMessage('Thank you');
+    } catch (e) {
+      setError('Error submitting email');
+      console.log(e, 'Error submitting email');
+    }
+  };
   useEffect(() => {
     if (account) {
       fetchIsOneOfOneCollector(account);
@@ -55,29 +90,80 @@ export default function Gallery() {
   return (
     <React.Fragment>
       <div
-        style={{ paddingTop: '50px', paddingBottom: '140px' }}
+        style={{ paddingTop: '50px', paddingBottom: '100px' }}
         className="basic-slider slider-Akel">
         <Alert />
-        <div className="container">
-          <div style={{ paddingTop: '40px' }} className="slider-content text-center">
-            <h3 className="mb-30">Simple is the best design</h3>
-            <p>We are Professional web developer and designer in this market.</p>
+        {!isOneOfOneCollector && !isNonCollector && !isOpenEditionCollector ? (
+          <p style={{ fontWeight: 500, color: 'rgb(233 6 7)', textAlign: 'center' }}>
+            You&apos;re not eligible for this drop
+          </p>
+        ) : (
+          <div className="container">
+            <div
+              style={{ paddingTop: '100px' }}
+              className="slider-content text-center"
+              dangerouslySetInnerHTML={{ __html: text }}
+            />
+            {/* <h5 className="mb-30">Dear Lady Phoenix</h5>
+              <p style={{ margin: '0 auto', maxWidth: '800px' }}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet lacus
+                laoreet, fermentum quam quis, pretium mauris. Nullam quis sem mollis, consequat nisi
+                eget, faucibus orci. Maecenas eu turpis lacus. Maecenas pharetra, mi id rhoncus
+                facilisis, leo libero egestas ipsum, gravida suscipit purus purus ut quam. Etiam sit
+                amet congue odio, et cursus sem. Sed placerat quam id facilisis tincidunt. Quisque
+                eget ex nec neque consectetur accumsan. Nulla quis velit eget odio ultricies
+                vehicula at id turpis.
+              </p> */}
+            <form onSubmit={submitEmail}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  paddingTop: '50px'
+                }}
+                className="row">
+                <div style={{ marginBottom: 0 }} className="col-md-6 form-group">
+                  <label className="sr-only">Email</label>
+                  <input
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    style={{ height: '40px', maxWidth: '300px', margin: '0 auto' }}
+                    type="email"
+                    className="form-control input-lg"
+                    placeholder="Please enter email"
+                  />
+                  <p
+                    style={{
+                      maxWidth: '300px',
+                      margin: '0 auto',
+                      marginBottom: '10px',
+                      marginTop: '5px',
+                      textAlign: 'center',
+                      color: error ? '#e90607' : '#474747'
+                    }}
+                    className="help-block text-danger">
+                    {error ? error : emailMessage ? emailMessage : ''}
+                  </p>
+                </div>
+                <div className="col-md-12 text-center">
+                  <button type="submit" className="btn btn-large">
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
-        </div>
+        )}
       </div>
       <div className="basic-portfolio-area ptb-90">
         <div className="container">
           <div id="portfolio-grid" className="row-portfolio portfolio-style-2">
-            {!isOneOfOneCollector && !isNonCollector && !isOpenEditionCollector && (
-              <p style={{ fontWeight: 500, color: 'rgb(233 6 7)', textAlign: 'center' }}>
-                You&apos;re not eligible for this drop
-              </p>
-            )}
             {isOneOfOneCollector ? (
               <div className="portfolio-item branding video">
                 <div className="portfolio-wrapper">
                   <div className="portfolio-thumb">
-                    <img src="img/portfolio/Flower 1 - 1_1 Collectors.png" alt="" />
+                    <img src="img/portfolio/The Gift (Formerly Known as Flower 1).JPG" alt="" />
                     <div className="view-icon">
                       <a href="portfolio-single.html">
                         <i className="ion-arrow-right-c"></i>
@@ -86,7 +172,7 @@ export default function Gallery() {
                   </div>
                   <div className="portfolio-caption text-left">
                     <div className="work-tag">
-                      <p>Flower 1</p>
+                      <p>The Gift</p>
                     </div>
                     <h4>
                       <a href="portfolio-single.html">One of One Collectors</a>
@@ -119,7 +205,10 @@ export default function Gallery() {
               <div className="portfolio-item branding video">
                 <div className="portfolio-wrapper">
                   <div className="portfolio-thumb">
-                    <img src="img/portfolio/Flower 2 - Non-Collectors.png" alt="" />
+                    <img
+                      src="img/portfolio/_Pillar of Love (Formerly known as Flower 2).JPG"
+                      alt=""
+                    />
                     <div className="view-icon">
                       <a href="portfolio-single.html">
                         <i className="ion-arrow-right-c"></i>
@@ -128,7 +217,7 @@ export default function Gallery() {
                   </div>
                   <div className="portfolio-caption text-left">
                     <div className="work-tag">
-                      <p>Flower 2</p>
+                      <p>Pillar of Love</p>
                     </div>
                     <h4>
                       <a href="portfolio-single.html">Non Collectors</a>
@@ -161,7 +250,7 @@ export default function Gallery() {
               <div className="portfolio-item branding video">
                 <div className="portfolio-wrapper">
                   <div className="portfolio-thumb">
-                    <img src="img/portfolio/Flower 3 - Open Edition Collectors .png" alt="" />
+                    <img src="img/portfolio/Purple Haven (Formerly Known As Flower 3).JPG" alt="" />
                     <div className="view-icon">
                       <a href="portfolio-single.html">
                         <i className="ion-arrow-right-c"></i>
@@ -170,7 +259,7 @@ export default function Gallery() {
                   </div>
                   <div className="portfolio-caption text-left">
                     <div className="work-tag">
-                      <p>Flower 3</p>
+                      <p>Purple Haven</p>
                     </div>
                     <h4>
                       <a href="portfolio-single.html">Open Edition Collectors</a>
