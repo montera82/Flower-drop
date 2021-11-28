@@ -3,9 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useAppContext } from '../AppContext';
 import { useFlower } from '../hooks/useFlower';
 import Alert from './Alert';
-
-const text =
-  '<h5 className="mb-20">To Colin Goltra,</h5><p style="margin: 0 auto; max-width: 800px;">Thank you for being an early believer in my work, by collecting <b>&lsquo;Glory II&rsquo;</b>, you have contributed immensely in my life and I&rsquo;m eternally grateful. I&rsquo;d like to give you your flowers for also being a tremendous figure in the web3/Crypto space and I appreciate all you&rsquo;ve done for myself and many other artists. <br /> <br /> Love, Lethabo Huma <br /></p>';
+import messages from '../messages';
 
 export default function Gallery() {
   const [email, setEmail] = useState('');
@@ -32,6 +30,8 @@ export default function Gallery() {
     mintNonCollectorCollection,
     mintOpenEditionCollection
   } = useFlower();
+
+  const text = messages[account] || 'GENERAL MESSAGE';
 
   const mintOneOfOne = (e) => {
     e.preventDefault();
