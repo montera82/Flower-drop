@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer>
+    <footer style={{ height: '100%' }}>
       <div className="basic-footer text-center gray-bg ptb-90">
         <div className="container">
           <div className="footer-logo mb-30">
@@ -25,8 +25,13 @@ export default function Footer() {
             </p>
             <p>
               Smart contract written and deployed by{' '}
-              <a href="https://twitter.com/Edwintops">Edwin</a> and{' '}
-              <a href="https://twitter.com/heydamali">Kingsley</a>
+              <a style={{ fontWeight: 500 }} href="https://twitter.com/Edwintops">
+                Edwin
+              </a>{' '}
+              and{' '}
+              <a style={{ fontWeight: 500 }} href="https://twitter.com/heydamali">
+                Kingsley
+              </a>
             </p>
           </div>
         </div>

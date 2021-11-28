@@ -1,6 +1,8 @@
 import React, { createContext, useReducer } from 'react';
 
 const initialContext = {
+  showModal: false,
+  setShowModal: () => {},
   metaMaskInstalled: false,
   setMetaMaskInstalled: () => {},
   account: null,
@@ -29,6 +31,11 @@ const initialContext = {
 
 const appReducer = (state, { type, payload }) => {
   switch (type) {
+    case 'SHOW_MODAL':
+      return {
+        ...state,
+        showModal: payload
+      };
     case 'SET_META_MASK_INSTALLED':
       return {
         ...state,
@@ -103,6 +110,10 @@ export const AppContextProvider = ({ children }) => {
   const [store, dispatch] = useReducer(appReducer, initialContext);
 
   const contextValue = {
+    showModal: store.showModal,
+    setShowModal: (result) => {
+      dispatch({ type: 'SHOW_MODAL', payload: result });
+    },
     metaMaskInstalled: store.metaMaskInstalled,
     setMetaMaskInstalled: (result) => {
       dispatch({ type: 'SET_META_MASK_INSTALLED', payload: result });
