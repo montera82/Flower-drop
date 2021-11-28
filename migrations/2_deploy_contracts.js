@@ -1,6 +1,6 @@
 const Flower = artifacts.require("Flower");
 
-const baseURI = ""; // todo change to pinata ipfs link
+const baseURI = "https://gateway.pinata.cloud/ipfs/QmWiCDsDycw2ZDGkMSm5ReYRDNASuYmGM3WFU6DwCX7Wrz/"; // todo change to pinata ipfs link
 const buildABetterFutureContract =
     "0xA509542aDa3196a38bD6fD03b253547EE09220C4";
 const timePieceCommunityContract =

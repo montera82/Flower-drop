@@ -1,32 +1,14 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/ERC721.sol";
 import "../node_modules/openzeppelin-solidity/contracts/access/Ownable.sol";
 
 // Reference contract line 1301
 // https://etherscan.io/address/0xa4631a191044096834ce65d1ee86b16b171d8080#code
 contract Flower is ERC721Enumerable, Ownable {
     string public baseURI;
-
-    // 1 of 1 collectors
-    // local account 3: 0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef
-
-    // non collectors
-    // local account 4: 0x821aEa9a577a9b44299B9c15c88cf3087F3b5544
-
-    // build a better future contract address aka (Safe Haven)
-    // local contract address: 0xA509542aDa3196a38bD6fD03b253547EE09220C4
-    // rinkeby contract address; 0x0b2202132E4C0EA64A2740f1230398262e5567B1
-    // LocalAccount1 = 0x627306090abaB3A6e1400e9345bC60c78a8BEf57;
-    // RinkebyAccount1 : 0xf795b1d0e21a6488f5f44d9e61d26ae556b97d8b
-    // TokenID : https://opensea.io/assets/0xdd69da9a83cedc730bc4d3c56e96d29acc05ecde/4211
-
-    // time piece community contract address aka (Grace 2)
-    // contract address: 0xABa7902442c5739c6f0c182691d48D63d06A212E
-    // rinkeby contract : 0xEF690F8C6A2D5e660AdAA1A813dba38e45404066
-    // LocalAccount2 = 0xf17f52151EbEF6C7334FAD080c5704D77216b732;
-    // RinkebyAccount2 : 0x57A37fC8651b972A1b86dF328598d6d9609d6e09
-    // TokenID : https://opensea.io/assets/0x9307edc4f23d87f9783a999f870b728ab9d34fe5/4251
 
     // Contract or mappings reference
     mapping(address => bool) oneOfOneCollectors;
@@ -39,7 +21,9 @@ contract Flower is ERC721Enumerable, Ownable {
     // mintList
     mapping(address => bool) public oneOfOneMintList;
     mapping(address => bool) public nonCollectorsMintList;
-    mapping(address => bool) public openEditionCollectorsMintList;
+    // tokenId => minted
+    mapping(uint256 => bool) safeHavenTokenMintList;
+    mapping(uint256 => bool) graceIITokenMintList;
 
     // counters
     // tokenIds 1 to 14
@@ -48,10 +32,14 @@ contract Flower is ERC721Enumerable, Ownable {
     // tokenIds 15 to 24
     uint256 private nonCollectorsMintedCount = 15;
 
-    // tokenIds 25 to ..
+    // tokenIds 25 to 54
     uint256 public openEditionCollectorsMintedCount = 25;
 
-    bool private mintOpen = true;
+    bool private mintOpen = false;
+
+    //these tokens must exists, otherwise the check fails cos of _exists
+    uint256[] safeHavenTokens = [1]; //babF
+    uint256[] graceIITokens = [2]; // IRB
 
     modifier whenMintOpened() {
         require(mintOpen == true, "Mint is not yet open");
@@ -75,6 +63,12 @@ contract Flower is ERC721Enumerable, Ownable {
         // define non-collectors
         nonCollectors[0x821aEa9a577a9b44299B9c15c88cf3087F3b5544] = true;
         nonCollectors[0x53C379A44018504059D01Ee3eB9645Cb115fD932] = true;
+
+        // _safeMint(_msgSender(),1);
+        // _safeMint(_msgSender(),2);
+        // _safeMint(_msgSender(),3);
+        // _safeMint(_msgSender(),4);
+        // _safeMint(_msgSender(),5);
     }
 
     function _baseURI() internal view virtual override returns (string memory) {
@@ -100,30 +94,60 @@ contract Flower is ERC721Enumerable, Ownable {
         return nonCollectors[_wallet];
     }
 
+    function _safeHavenOwner(address _wallet)
+        internal
+        view
+        returns (bool _holder, uint256 _tokenId)
+    {
+        ERC721 buildABetterFuture = ERC721(BuildABetterFutureContract);
+
+        for (uint256 i = 0; i < safeHavenTokens.length; i++) {
+            if (buildABetterFuture.ownerOf(safeHavenTokens[i]) == _wallet) {
+                return (true, safeHavenTokens[i]);
+            }
+        }
+        return (false, 0);
+    }
+
+    function _graceIIOwner(address _wallet)
+        internal
+        view
+        returns (bool _holder, uint256 _tokenId)
+    {
+        ERC721 timePieceCommunity = ERC721(TimePieceCommunityContract);
+
+        for (uint256 i = 0; i < graceIITokens.length; i++) {
+            if (timePieceCommunity.ownerOf(graceIITokens[i]) == _wallet) {
+                return (true, graceIITokens[i]);
+            }
+        }
+        return (false, 0);
+    }
+
     // function to determine if sender is open-edition collector
     // open edition collector = holderOfTimePieceCommunity or holderOfBuildABetterFuture
     function isOpenEditionCollector(address _wallet)
         public
         view
-        returns (bool isHolder)
+        returns (
+            bool isHolder,
+            uint256 _safeHavenTokenId,
+            uint256 _graceIITokenId
+        )
     {
-        ERC721Enumerable buildABetterFuture = ERC721Enumerable(
-            BuildABetterFutureContract
+        (bool _safeHavenHolder, uint256 _safeHavenTokenId) = _safeHavenOwner(
+            _wallet
         );
-        ERC721Enumerable timePieceCommunity = ERC721Enumerable(
-            TimePieceCommunityContract
-        );
+        (bool _graceIIHolder, uint256 _graceIITokenId) = _graceIIOwner(_wallet);
 
-        isHolder =
-            buildABetterFuture.balanceOf(_wallet) > 0 ||
-            timePieceCommunity.balanceOf(_wallet) > 0;
-        return isHolder;
+        isHolder = _safeHavenHolder == true || _graceIIHolder == true;
+        return (isHolder, _safeHavenTokenId, _graceIITokenId);
     }
 
     // function to allow 1 of 1 holder collector mint
     function mint1Of1Holder(address _wallet) external whenMintOpened {
         require(
-            oneOfOneMintList[_wallet] == false,
+            oneOfOneMintList[_wallet],
             "Wallet already minted before for this category"
         );
         require(
@@ -136,8 +160,8 @@ contract Flower is ERC721Enumerable, Ownable {
             oneOfOneMintedCount <= 14,
             "INTERNAL ERROR: Reached max tokens allowed for this category"
         );
-
         uint256 tokenId = oneOfOneMintedCount;
+
         _safeMint(_wallet, tokenId);
 
         oneOfOneMintList[_wallet] = true;
@@ -149,7 +173,7 @@ contract Flower is ERC721Enumerable, Ownable {
     // function to allow non-collector mint
     function mintNonCollector(address _wallet) external whenMintOpened {
         require(
-            nonCollectorsMintList[_wallet] == false,
+            nonCollectorsMintList[_wallet],
             "Wallet already minted before for this category"
         );
         require(
@@ -163,43 +187,51 @@ contract Flower is ERC721Enumerable, Ownable {
             nonCollectorsMintedCount <= 24,
             "INTERNAL ERROR: Reached max tokens allowed for this category"
         );
-
         uint256 tokenId = nonCollectorsMintedCount;
+
         _safeMint(_wallet, tokenId);
 
         nonCollectorsMintList[_wallet] = true;
         nonCollectorsMintedCount += 1;
-
-        emit LogMintNonCollector(_wallet,  tokenId);
+        emit LogMintNonCollector(_wallet, tokenId);
     }
 
     // function to allow open-edition collector mint
     function mintOpenEdition(address _wallet) external whenMintOpened {
+        (
+            bool isHolder,
+            uint256 _safeHavenTokenId,
+            uint256 _graceIITokenId
+        ) = isOpenEditionCollector(_wallet);
         require(
-            openEditionCollectorsMintList[_wallet] == false,
-            "Wallet already minted before for this category"
+            isHolder == true,
+            "Must be a holder of GraceII or SafeHaven"
         );
         require(
-            isOpenEditionCollector(_wallet) == true,
-            "Wallet must be an open edition collector"
+            safeHavenTokenMintList[_safeHavenTokenId] == false ||
+                graceIITokenMintList[_graceIITokenId] == false,
+            "Wallet minted already before for this category"
         );
 
-        // ToDO : add hard limit for total supply
         // Todod: store a mapping ( openEditionTOkenId => bool )
-        
+        require(
+            openEditionCollectorsMintedCount <= 54,
+            "INTERNAL ERROR: Reached max tokens allowed for this category"
+        );
         uint256 tokenId = openEditionCollectorsMintedCount;
+
         _safeMint(_wallet, tokenId);
 
-        openEditionCollectorsMintList[_wallet] = true;
+        // -- store tokenId and address that minted
+        if (_safeHavenTokenId != 0) {
+            safeHavenTokenMintList[_safeHavenTokenId] = true;
+        } else {
+            graceIITokenMintList[_graceIITokenId] = true;
+        }
+
         openEditionCollectorsMintedCount += 1;
-
-        emit LogMintOpenEdition(_wallet,  tokenId);
+        emit LogMintOpenEdition(_wallet, tokenId);
     }
-
-    // function to bulk add non-collector addresses to a map - hmm, this will cost gas to do
-    // function to add single non-collector address to a map - hmm, this will cost gass to do
-
-    // function to remove non-collector address from a map
 
     // Events
     event LogMintOneOfOneHolder(address indexed _address, uint256 _tokenId);
