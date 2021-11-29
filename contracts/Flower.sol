@@ -111,6 +111,32 @@ contract Flower is ERC721Enumerable, Ownable {
         return (false, 0);
     }
 
+    function isSafeHavenOwner(address _wallet, uint256 _tokenId)
+        public
+        view
+        returns (bool)
+    {
+        ERC721 buildABetterFuture = ERC721(BuildABetterFutureContract);
+
+        if (buildABetterFuture.ownerOf(_tokenId) == _wallet) {
+            return true;
+        }
+        return false;
+    }
+
+    function isGraceIIOwner(address _wallet, uint256 _tokenId)
+        public
+        view
+        returns (bool)
+    {
+        ERC721 timePieceCommunity = ERC721(TimePieceCommunityContract);
+
+        if (timePieceCommunity.ownerOf(_tokenId) == _wallet) {
+            return true;
+        }
+        return false;
+    }
+
     // function to determine if sender is open-edition collector
     // open edition collector = holderOfTimePieceCommunity or holderOfBuildABetterFuture
     function isOpenEditionCollector(address _wallet)
