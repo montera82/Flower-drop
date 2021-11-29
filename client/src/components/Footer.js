@@ -9,27 +9,24 @@ export default function Footer() {
             </h3>
           </div>
           <div className="social-icon">
-            <a href="#">
-              <i className="ion-social-facebook"></i>
-            </a>
-            <a href="#">
+            <a target="_blank" href="https://www.instagram.com/lethabohuma_art/">
               <i className="ion-social-instagram"></i>
             </a>
-            <a href="#">
+            <a target="_blank" href="https://www.twitter.com/lethabohuma/">
               <i className="ion-social-twitter"></i>
             </a>
           </div>
           <div className="copyright mt-20">
             <p>
-              All copyright © reserved by <a href="#">Lethabo Huma</a> 2021
+              All copyright © reserved by <a target="_blank" href="https://www.lethabohuma.com">Lethabo Huma</a> 2021
             </p>
             <p>
               Smart contract written and deployed by{' '}
-              <a style={{ fontWeight: 500 }} href="https://twitter.com/Edwintops">
+              <a style={{ fontWeight: 500 }} target="_blank" href="https://twitter.com/Edwintops">
                 Edwin
               </a>{' '}
               and{' '}
-              <a style={{ fontWeight: 500 }} href="https://twitter.com/heydamali">
+              <a style={{ fontWeight: 500 }} target="_blank" href="https://twitter.com/heydamali">
                 Kingsley
               </a>
             </p>
