@@ -21,9 +21,10 @@ contract Flower is ERC721Enumerable, Ownable {
     // mintList
     mapping(address => bool) public oneOfOneMintList;
     mapping(address => bool) public nonCollectorsMintList;
+    mapping(address => bool) public openEditionCollectorsMintList;
     // tokenId => minted
-    mapping(uint256 => bool) safeHavenTokenMintList;
-    mapping(uint256 => bool) graceIITokenMintList;
+    mapping(uint256 => bool) public safeHavenTokenMintList;
+    mapping(uint256 => bool) public graceIITokenMintList;
 
     // counters
     // tokenIds 1 to 14
@@ -33,7 +34,7 @@ contract Flower is ERC721Enumerable, Ownable {
     uint256 private nonCollectorsMintedCount = 15;
 
     // tokenIds 25 to 54
-    uint256 public openEditionCollectorsMintedCount = 25;
+    uint256 private openEditionCollectorsMintedCount = 25;
 
     bool private mintOpen = false;
 
@@ -63,25 +64,11 @@ contract Flower is ERC721Enumerable, Ownable {
         // define non-collectors
         nonCollectors[0x53C379A44018504059D01Ee3eB9645Cb115fD932] = true;
         nonCollectors[0xF795b1d0E21A6488f5F44d9e61D26aE556b97D8b] = true;
-
-        // _safeMint(_msgSender(),1);
-        // _safeMint(_msgSender(),2);
-        // _safeMint(_msgSender(),3);
-        // _safeMint(_msgSender(),4);
-        // _safeMint(_msgSender(),5);
+        nonCollectors[0x7ed90FDd530Ec92E90E197bA891378b1f9680e0A] = true;
     }
 
     function _baseURI() internal view virtual override returns (string memory) {
         return baseURI;
-    }
-
-    function setBaseURI(string memory newURI) public onlyOwner {
-        baseURI = newURI;
-    }
-
-    function setMintOpen(bool value) external onlyOwner {
-        require(mintOpen != value, "mintOpen already this value");
-        mintOpen = value;
     }
 
     // function to determine if sender is is1Of1Holder
@@ -203,10 +190,7 @@ contract Flower is ERC721Enumerable, Ownable {
             uint256 _safeHavenTokenId,
             uint256 _graceIITokenId
         ) = isOpenEditionCollector(_wallet);
-        require(
-            isHolder == true,
-            "Must be a holder of GraceII or SafeHaven"
-        );
+        require(isHolder == true, "Must be a holder of GraceII or SafeHaven");
         require(
             safeHavenTokenMintList[_safeHavenTokenId] == false ||
                 graceIITokenMintList[_graceIITokenId] == false,
@@ -230,7 +214,36 @@ contract Flower is ERC721Enumerable, Ownable {
         }
 
         openEditionCollectorsMintedCount += 1;
+        openEditionCollectorsMintList[_wallet] = true;
         emit LogMintOpenEdition(_wallet, tokenId);
+    }
+
+    // Only owner - admin methods
+    function setBaseURI(string memory newURI) public onlyOwner {
+        baseURI = newURI;
+    }
+
+    function setMintOpen(bool value) external onlyOwner {
+        require(mintOpen != value, "mintOpen already this value");
+        mintOpen = value;
+    }
+
+    // these method below should never reallybe used as they may reset the counters for available mints
+    // only added here to prevent total lockout
+    function addOneOfOneCollector(address _wallet) external onlyOwner {
+        require(
+            oneOfOneCollectors[_wallet] != true,
+            "Wallet has already added to the one of one collector list"
+        );
+        oneOfOneCollectors[_wallet] = true;
+    }
+
+    function addNonCollector(address _wallet) external onlyOwner {
+        require(
+            nonCollectors[_wallet] != true,
+            "Wallet has already added to the non collector list"
+        );
+        nonCollectors[_wallet] = true;
     }
 
     // Events
