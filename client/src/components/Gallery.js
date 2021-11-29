@@ -31,8 +31,9 @@ export default function Gallery() {
     mintOpenEditionCollection
   } = useFlower();
 
-  const text = messages[account] || 'GENERAL MESSAGE';
-
+  const text =
+    messages[account] ||
+    '<h5 className="mb-20"></h5><p style="margin: 0 auto; max-width: 800px;">As a <b>Timepiece</b> holder, thank you for choosing a Lethabo Huma piece.</p><p>This is my flower of appreciation to you.</p><p>Love, Lethabo Huma</p>';
   const mintOneOfOne = (e) => {
     e.preventDefault();
     mintOneOfOneCollection(account);
