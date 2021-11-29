@@ -118,7 +118,7 @@ export default function Gallery() {
                   <input
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    style={{ height: '40px', maxWidth: '300px', margin: '0 auto' }}
+                    style={{ height: '40px', maxWidth: '650px', margin: '0 auto' }}
                     type="email"
                     className="form-control input-lg"
                     placeholder="Please enter email"
