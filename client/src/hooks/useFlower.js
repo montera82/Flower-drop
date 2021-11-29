@@ -25,7 +25,7 @@ export const useFlower = () => {
     setHasMintedOpenEditionCollection
   } = useAppContext();
 
-  const flowerContractAddress = '0x35B7C302CD8aE4A08505B13440E557a8A2A2379F'; // Rinkeby
+  const flowerContractAddress = '0x2fC0F86f195DA1bb9F489E6EFAD46595Df18e2b4'; // Rinkeby
   const flowerContract = useContract(flowerContractAddress, Flower.abi);
 
   const fetchIsOneOfOneCollector = async (address) => {
