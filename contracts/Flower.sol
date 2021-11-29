@@ -58,11 +58,11 @@ contract Flower is ERC721Enumerable, Ownable {
 
         // define one-of-one-collectors
         // TOdo: fill here with the address from the sheet
-        oneOfOneCollectors[0x53C379A44018504059D01Ee3eB9645Cb115fD932] = true;
+        //oneOfOneCollectors[0x53C379A44018504059D01Ee3eB9645Cb115fD932] = true;
 
         // define non-collectors
-        nonCollectors[0x821aEa9a577a9b44299B9c15c88cf3087F3b5544] = true;
         nonCollectors[0x53C379A44018504059D01Ee3eB9645Cb115fD932] = true;
+        nonCollectors[0xF795b1d0E21A6488f5F44d9e61D26aE556b97D8b] = true;
 
         // _safeMint(_msgSender(),1);
         // _safeMint(_msgSender(),2);
@@ -131,8 +131,8 @@ contract Flower is ERC721Enumerable, Ownable {
         view
         returns (
             bool isHolder,
-            uint256 _safeHavenTokenId,
-            uint256 _graceIITokenId
+            uint256 safeHavenTokenId,
+            uint256 graceIITokenId
         )
     {
         (bool _safeHavenHolder, uint256 _safeHavenTokenId) = _safeHavenOwner(
