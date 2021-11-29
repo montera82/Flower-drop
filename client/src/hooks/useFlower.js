@@ -71,10 +71,7 @@ export const useFlower = () => {
 
       const result1 = await Promise.all(
         safeHeavenTokens.map(async (token) => {
-          const isSafeHeavenOwner = await flowerContract.isSafeHavenOwner(
-            '0x17d27868334fa69668f44c8e1a25d40f4c742cf7',
-            token
-          );
+          const isSafeHeavenOwner = await flowerContract.isSafeHavenOwner(address, token);
 
           return isSafeHeavenOwner;
         })
@@ -82,10 +79,7 @@ export const useFlower = () => {
 
       const result2 = await Promise.all(
         graceIITokens.map(async (token) => {
-          const isGraceIIOwner = await flowerContract.isGraceIIOwner(
-            '0x17d27868334fa69668f44c8e1a25d40f4c742cf7',
-            token
-          );
+          const isGraceIIOwner = await flowerContract.isGraceIIOwner(address, token);
 
           return isGraceIIOwner;
         })
@@ -94,7 +88,6 @@ export const useFlower = () => {
       console.log(result1, result2);
       isOpenEditionCollector = [...result1, ...result2].some((res) => res == true);
       setIsOpenEditionCollector(isOpenEditionCollector);
-      console.log(isOpenEditionCollector, 'res ---------->');
     } catch (e) {
       console.log(e.message, 'Error fetching isOpenEditionCollector');
       toast(e.message);
