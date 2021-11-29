@@ -5,28 +5,40 @@ export default function Footer() {
         <div className="container">
           <div className="footer-logo mb-30">
             <h3>
-              <a href="index.html">FINAL DROP – LETHABO HUMA</a>
+              <a href="">FINAL DROP – LETHABO HUMA</a>
             </h3>
           </div>
           <div className="social-icon">
-            <a target="_blank" href="https://www.instagram.com/lethabohuma_art/">
+            <a target="_blank" rel="noreferrer" href="https://www.instagram.com/lethabohuma_art/">
               <i className="ion-social-instagram"></i>
             </a>
-            <a target="_blank" href="https://www.twitter.com/lethabohuma/">
+            <a target="_blank" rel="noreferrer" href="https://www.twitter.com/lethabohuma/">
               <i className="ion-social-twitter"></i>
             </a>
           </div>
           <div className="copyright mt-20">
             <p>
-              All copyright © reserved by <a target="_blank" href="https://www.lethabohuma.com">Lethabo Huma</a> 2021
+              All copyright © reserved by{' '}
+              <a target="_blank" rel="noreferrer" href="https://www.lethabohuma.com">
+                Lethabo Huma
+              </a>{' '}
+              2021
             </p>
             <p>
               Smart contract written and deployed by{' '}
-              <a style={{ fontWeight: 500 }} target="_blank" href="https://twitter.com/Edwintops">
+              <a
+                style={{ fontWeight: 500 }}
+                target="_blank"
+                rel="noreferrer"
+                href="https://twitter.com/Edwintops">
                 Edwin
               </a>{' '}
               and{' '}
-              <a style={{ fontWeight: 500 }} target="_blank" href="https://twitter.com/heydamali">
+              <a
+                style={{ fontWeight: 500 }}
+                target="_blank"
+                rel="noreferrer"
+                href="https://twitter.com/heydamali">
                 Kingsley
               </a>
             </p>
