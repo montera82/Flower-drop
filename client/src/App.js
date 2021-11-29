@@ -1,10 +1,13 @@
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import Header from './components/Header';
 import Gallery from './components/Gallery';
 import Welcome from './components/Welcome';
 import Footer from './components/Footer';
 import { AppContextProvider } from './AppContext';
+
 import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -21,6 +24,7 @@ function App() {
         </Switch>
         <Footer />
       </Router>
+      <ToastContainer autoClose={8000} />
     </AppContextProvider>
   );
 }
