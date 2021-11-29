@@ -57,7 +57,7 @@ export default function Header() {
             <div
               style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
               className="col-sm-12">
-              <div>
+              <div className="hide-on-small">
                 <li>
                   <Link to="/" style={{ fontWeight: 700 }}>
                     Home
