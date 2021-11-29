@@ -22,10 +22,10 @@ export default function Gallery() {
     hasMintedOpenEditionCollection,
     fetchIsOneOfOneCollector,
     fetchIsNonCollector,
-    // fetchIsOpenEditionCollector,
+    fetchIsOpenEditionCollector,
     fetchHasMintedOneOfOneCollection,
     fetchHasMintedNonCollection,
-    // fetchHasMintedOpenEditionCollection,
+    fetchHasMintedOpenEditionCollection,
     mintOneOfOneCollection,
     mintNonCollectorCollection,
     mintOpenEditionCollection
@@ -80,10 +80,10 @@ export default function Gallery() {
     if (account) {
       fetchIsOneOfOneCollector(account);
       fetchIsNonCollector(account);
-      // fetchIsOpenEditionCollector(account);
+      fetchIsOpenEditionCollector(account);
       fetchHasMintedOneOfOneCollection(account);
       fetchHasMintedNonCollection(account);
-      // fetchHasMintedOpenEditionCollection(account);
+      fetchHasMintedOpenEditionCollection(account);
     }
   }, [account]);
 
@@ -104,16 +104,6 @@ export default function Gallery() {
               className="slider-content text-center"
               dangerouslySetInnerHTML={{ __html: text }}
             />
-            {/* <h5 className="mb-30">Dear Lady Phoenix</h5>
-              <p style={{ margin: '0 auto', maxWidth: '800px' }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet lacus
-                laoreet, fermentum quam quis, pretium mauris. Nullam quis sem mollis, consequat nisi
-                eget, faucibus orci. Maecenas eu turpis lacus. Maecenas pharetra, mi id rhoncus
-                facilisis, leo libero egestas ipsum, gravida suscipit purus purus ut quam. Etiam sit
-                amet congue odio, et cursus sem. Sed placerat quam id facilisis tincidunt. Quisque
-                eget ex nec neque consectetur accumsan. Nulla quis velit eget odio ultricies
-                vehicula at id turpis.
-              </p> */}
             <form onSubmit={submitEmail}>
               <div
                 style={{
@@ -159,134 +149,131 @@ export default function Gallery() {
       <div className="basic-portfolio-area ptb-90">
         <div className="container">
           <div id="portfolio-grid" className="row-portfolio portfolio-style-2">
-            {isOneOfOneCollector ? (
-              <div className="portfolio-item branding video">
-                <div className="portfolio-wrapper">
-                  <div className="portfolio-thumb">
-                    <img src="img/portfolio/The Gift (Formerly Known as Flower 1).JPG" alt="" />
-                    <div className="view-icon">
-                      <a href="portfolio-single.html">
-                        <i className="ion-arrow-right-c"></i>
-                      </a>
-                    </div>
-                  </div>
-                  <div className="portfolio-caption text-left">
-                    <div className="work-tag">
-                      <p>The Gift</p>
-                    </div>
-                    <h4>
-                      <a href="portfolio-single.html">One of One Collectors</a>
-                    </h4>
+            <div className="portfolio-item branding video">
+              <div className="portfolio-wrapper">
+                <div className="portfolio-thumb">
+                  <img src="img/portfolio/The Gift (Formerly Known as Flower 1).JPG" alt="" />
+                  <div className="view-icon">
+                    <a href="portfolio-single.html">
+                      <i className="ion-arrow-right-c"></i>
+                    </a>
                   </div>
                 </div>
+                <div className="portfolio-caption text-left">
+                  <div className="work-tag">
+                    <p>The Gift</p>
+                  </div>
+                  <h4>
+                    <a href="portfolio-single.html">One of One Collectors</a>
+                  </h4>
+                </div>
+              </div>
 
-                {
-                  <div className="view-more mt-20 text-center">
-                    <a
-                      style={{
-                        pointerEvents: hasMintedOneOfOneCollection ? 'none' : 'auto',
-                        background: hasMintedOneOfOneCollection ? 'rgb(188 188 188)' : '#444'
-                      }}
-                      onClick={mintOneOfOne}
-                      className="btn btn-large">
-                      {hasMintedOneOfOneCollection
-                        ? 'Claim'
-                        : mintingOneOfOne
-                        ? 'Claiming...'
-                        : 'Claim'}
+              {
+                <div className="view-more mt-20 text-center">
+                  <a
+                    style={{
+                      pointerEvents:
+                        hasMintedOneOfOneCollection || !isOneOfOneCollector ? 'none' : 'auto',
+                      background:
+                        hasMintedOneOfOneCollection || !isOneOfOneCollector
+                          ? 'rgb(188 188 188)'
+                          : '#444'
+                    }}
+                    onClick={mintOneOfOne}
+                    className="btn btn-large">
+                    {hasMintedOneOfOneCollection
+                      ? 'Claim'
+                      : mintingOneOfOne
+                      ? 'Claiming...'
+                      : 'Claim'}
+                  </a>
+                </div>
+              }
+            </div>
+            <div className="portfolio-item branding video">
+              <div className="portfolio-wrapper">
+                <div className="portfolio-thumb">
+                  <img
+                    src="img/portfolio/_Pillar of Love (Formerly known as Flower 2).JPG"
+                    alt=""
+                  />
+                  <div className="view-icon">
+                    <a href="portfolio-single.html">
+                      <i className="ion-arrow-right-c"></i>
                     </a>
                   </div>
-                }
-              </div>
-            ) : (
-              ''
-            )}
-            {isNonCollector ? (
-              <div className="portfolio-item branding video">
-                <div className="portfolio-wrapper">
-                  <div className="portfolio-thumb">
-                    <img
-                      src="img/portfolio/_Pillar of Love (Formerly known as Flower 2).JPG"
-                      alt=""
-                    />
-                    <div className="view-icon">
-                      <a href="portfolio-single.html">
-                        <i className="ion-arrow-right-c"></i>
-                      </a>
-                    </div>
-                  </div>
-                  <div className="portfolio-caption text-left">
-                    <div className="work-tag">
-                      <p>Pillar of Love</p>
-                    </div>
-                    <h4>
-                      <a href="portfolio-single.html">Non Collectors</a>
-                    </h4>
-                  </div>
                 </div>
+                <div className="portfolio-caption text-left">
+                  <div className="work-tag">
+                    <p>Pillar of Love</p>
+                  </div>
+                  <h4>
+                    <a href="portfolio-single.html">Non Collectors</a>
+                  </h4>
+                </div>
+              </div>
 
-                {
-                  <div className="view-more mt-20 text-center">
-                    <a
-                      style={{
-                        pointerEvents: hasMintedNonCollection ? 'none' : 'auto',
-                        background: hasMintedNonCollection ? 'rgb(188 188 188)' : '#444'
-                      }}
-                      onClick={mintNonCollector}
-                      className="btn btn-large">
-                      {hasMintedNonCollection
-                        ? 'Claimed'
-                        : mintingNonCollector
-                        ? 'Claiming...'
-                        : 'Claim'}
+              {
+                <div className="view-more mt-20 text-center">
+                  <a
+                    style={{
+                      pointerEvents: hasMintedNonCollection || !isNonCollector ? 'none' : 'auto',
+                      background:
+                        hasMintedNonCollection || !isNonCollector ? 'rgb(188 188 188)' : '#444'
+                    }}
+                    onClick={mintNonCollector}
+                    className="btn btn-large">
+                    {hasMintedNonCollection
+                      ? 'Claimed'
+                      : mintingNonCollector
+                      ? 'Claiming...'
+                      : 'Claim'}
+                  </a>
+                </div>
+              }
+            </div>
+            <div className="portfolio-item branding video">
+              <div className="portfolio-wrapper">
+                <div className="portfolio-thumb">
+                  <img src="img/portfolio/Purple Haven (Formerly Known As Flower 3).JPG" alt="" />
+                  <div className="view-icon">
+                    <a href="portfolio-single.html">
+                      <i className="ion-arrow-right-c"></i>
                     </a>
-                  </div>
-                }
-              </div>
-            ) : (
-              ''
-            )}
-            {isNonCollector ? (
-              <div className="portfolio-item branding video">
-                <div className="portfolio-wrapper">
-                  <div className="portfolio-thumb">
-                    <img src="img/portfolio/Purple Haven (Formerly Known As Flower 3).JPG" alt="" />
-                    <div className="view-icon">
-                      <a href="portfolio-single.html">
-                        <i className="ion-arrow-right-c"></i>
-                      </a>
-                    </div>
-                  </div>
-                  <div className="portfolio-caption text-left">
-                    <div className="work-tag">
-                      <p>Purple Haven</p>
-                    </div>
-                    <h4>
-                      <a href="portfolio-single.html">Open Edition Collectors</a>
-                    </h4>
                   </div>
                 </div>
-                {
-                  <div className="view-more mt-20 text-center">
-                    <a
-                      style={{
-                        pointerEvents: hasMintedOpenEditionCollection ? 'none' : 'auto',
-                        background: hasMintedOpenEditionCollection ? 'rgb(188 188 188)' : '#444'
-                      }}
-                      onClick={mintOpenEdition}
-                      className="btn btn-large">
-                      {hasMintedOpenEditionCollection
-                        ? 'Claimed'
-                        : mintingOpenEdition
-                        ? 'Claiming...'
-                        : 'Claim'}
-                    </a>
+                <div className="portfolio-caption text-left">
+                  <div className="work-tag">
+                    <p>Purple Haven</p>
                   </div>
-                }
+                  <h4>
+                    <a href="portfolio-single.html">Open Edition Collectors</a>
+                  </h4>
+                </div>
               </div>
-            ) : (
-              ''
-            )}
+              {
+                <div className="view-more mt-20 text-center">
+                  <a
+                    style={{
+                      pointerEvents:
+                        hasMintedOpenEditionCollection || !isOpenEditionCollector ? 'none' : 'auto',
+                      background:
+                        hasMintedOpenEditionCollection || !isOpenEditionCollector
+                          ? 'rgb(188 188 188)'
+                          : '#444'
+                    }}
+                    onClick={mintOpenEdition}
+                    className="btn btn-large">
+                    {hasMintedOpenEditionCollection
+                      ? 'Claimed'
+                      : mintingOpenEdition
+                      ? 'Claiming...'
+                      : 'Claim'}
+                  </a>
+                </div>
+              }
+            </div>
           </div>
         </div>
       </div>
