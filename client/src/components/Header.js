@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { shortenAddress } from '../utils/shortenAddress';
 import { useAppContext } from '../AppContext';
+import { toast } from 'react-toastify';
 
 export default function Header() {
   const { account, metaMaskInstalled, setAccount, setChainId, setShowModal } = useAppContext();
@@ -9,12 +10,35 @@ export default function Header() {
   async function connectWallet(e) {
     e.preventDefault();
     try {
-      const account = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      setAccount(account[0]);
-      localStorage.setItem('accountData', JSON.stringify({ account: account[0] }));
-      setShowModal(true);
+      const accounts = await window.ethereum
+        .request({
+          method: 'wallet_requestPermissions',
+          params: [
+            {
+              eth_accounts: {}
+            }
+          ]
+        })
+        .then(() =>
+          window.ethereum.request({
+            method: 'eth_requestAccounts'
+          })
+        );
+      // const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      setAccount(accounts[0]);
+      localStorage.setItem('accountData', JSON.stringify({ account: accounts[0] }));
     } catch (e) {
-      window.alert('MetaMask not found');
+      toast('MetaMask not found, please install and try again.');
+    }
+  }
+
+  async function disconnectWallet(e) {
+    e.preventDefault();
+    try {
+      setAccount(null);
+      localStorage.setItem('accountData', JSON.stringify({ account: null }));
+    } catch (e) {
+      window.alert('Error disconnecting MetaMask');
     }
   }
 
@@ -70,20 +94,24 @@ export default function Header() {
                 </h4>
               </div>
               <div className="basic-menu">
-                <li>
-                  {account ? (
-                    <a style={{ fontWeight: 700, pointerEvents: 'none' }}>
-                      {shortenAddress(account, 4)}
-                    </a>
-                  ) : (
-                    <a
-                      onClick={connectWallet}
-                      style={{ fontWeight: 700, color: '#e90607' }}
-                      href="index.html">
+                {account ? (
+                  <>
+                    <li>
+                      <a style={{ fontWeight: 700, pointerEvents: 'none' }}>
+                        {shortenAddress(account, 4)}
+                      </a>
+                    </li>
+                    <li>
+                      <a onClick={disconnectWallet}>Logout</a>
+                    </li>
+                  </>
+                ) : (
+                  <li>
+                    <a onClick={connectWallet} style={{ fontWeight: 700, color: '#e90607' }}>
                       Connect Wallet
                     </a>
-                  )}
-                </li>
+                  </li>
+                )}
               </div>
             </div>
           </div>
