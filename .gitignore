@@ -66,3 +66,4 @@ metadata
 .secret
 
 ~$*.pptx
+.DS_Store
