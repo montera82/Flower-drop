@@ -5,12 +5,9 @@ import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/extensions/
 import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/ERC721.sol";
 import "../node_modules/openzeppelin-solidity/contracts/access/Ownable.sol";
 
-// Reference contract line 1301
-// https://etherscan.io/address/0xa4631a191044096834ce65d1ee86b16b171d8080#code
 contract Flower is ERC721Enumerable, Ownable {
     string public baseURI;
 
-    // Contract or mappings reference
     mapping(address => bool) oneOfOneCollectors;
 
     mapping(address => bool) nonCollectors;
@@ -60,7 +57,6 @@ contract Flower is ERC721Enumerable, Ownable {
         require(mintOpen == true, "Mint is not yet open");
         _;
     }
-
     constructor(
         string memory _initBaseURI,
         address buildABetterFutureContract,
@@ -72,29 +68,47 @@ contract Flower is ERC721Enumerable, Ownable {
         TimePieceCommunityContract = timePieceCommunityContract;
 
         // define one-of-one-collectors
-        // TOdo: fill here with the address from the sheet
-        //oneOfOneCollectors[0x53C379A44018504059D01Ee3eB9645Cb115fD932] = true;
+        oneOfOneCollectors[0x8c9F364bf7a56Ed058fc63Ef81c6Cf09c833e656] = true;
+        oneOfOneCollectors[0x9FDf724BcDF9392bD4b99A1C463EC674bC891bB9] = true;
+        oneOfOneCollectors[0x1E815a8188F1b84564577C1c998f7E6B4706B752] = true;
+        oneOfOneCollectors[0x109Ad81CA063fa1a8237189e31821d3114c52a4e] = true;
+        oneOfOneCollectors[0x75259686c1C967399eDA0b4B16f16FB0990f9615] = true;
+        oneOfOneCollectors[0xC571147a515a789eB23cbCBf92F86bc1485ab877] = true;
+        oneOfOneCollectors[0x30a189710f75c6b60b96081F12B288AbEDeDa260] = true;
+        oneOfOneCollectors[0x4E84a91a450aeEF23F0670Fb486d55b1d85A8dD0] = true;
+        oneOfOneCollectors[0x3612b2e93b49F6c797066cA8c38b7f522b32c7cb] = true;
+        oneOfOneCollectors[0xcF6f5A68d94165081A634AdA997BE3A93426C467] = true;
+        oneOfOneCollectors[0x8C94072567b278b9fa12192CcA899B3Ce0ED5FDc] = true;
+        oneOfOneCollectors[0x8139bA1a21dB4b924A81D5De90a98980B5D502E5] = true;
+        oneOfOneCollectors[0xcA71c095Ac06c5f17e03Da013c8041701Ef438b6] = true;
+        oneOfOneCollectors[0x0D48086911270b67bC973B7AA1A1332EF83DD472] = true;
 
         // define non-collectors
-        nonCollectors[0x53C379A44018504059D01Ee3eB9645Cb115fD932] = true;
-        nonCollectors[0xF795b1d0E21A6488f5F44d9e61D26aE556b97D8b] = true;
+        nonCollectors[0x80Aa4AF1Fb6e8a381b73809cbf06AED2666A7b64] = true;
+        nonCollectors[0x7E66dE1A57e6DC63B31FF03B50c103379c840d14] = true;
+        nonCollectors[0xeb758d7b02eb8ADfAA553f49Cfa8b034Ab73c1C4] = true;
+        nonCollectors[0xFC789C7927aC1cC8CaeFDE8bEbf493961AC5be9B] = true;
+        nonCollectors[0x0f2f2F7bFC893aDa1714802924F96B82c9A1fFD3] = true;
+        nonCollectors[0x215F7aDd9541Bc097679D9237DF7d42bb114134c] = true;
+        nonCollectors[0xb3007FF3c3F40bDF0126fEc7c8E43c3Fc50Ea813] = true;
+        nonCollectors[0x1Da98aa4FaEFB6eC93cC1bA6AdcFB59c8aF51152] = true;
+        nonCollectors[0x2c11Cf38a6A5Ac74eA438d0037F7f880021FC66f] = true;
         nonCollectors[0x7ed90FDd530Ec92E90E197bA891378b1f9680e0A] = true;
+        nonCollectors[0xDc1bc12a38206B010971859DC7177AfF9d27C454] = true;
+        nonCollectors[0x5F0ACdE83F858014bc9723B356095E28fc8880B1] = true;
     }
 
     function _baseURI() internal view virtual override returns (string memory) {
         return baseURI;
     }
 
-    // function to determine if sender is is1Of1Holder
     function isOneOfOneCollector(address _wallet) public view returns (bool) {
         return oneOfOneCollectors[_wallet];
     }
 
-    // function to determine if sender is non-collector hodler
     function isNonCollector(address _wallet) public view returns (bool) {
         return nonCollectors[_wallet];
     }
-
     function _safeHavenOwner(address _wallet)
         internal
         view
@@ -125,6 +139,8 @@ contract Flower is ERC721Enumerable, Ownable {
         return (false, 0);
     }
 
+    // below function and next following seems like a duplication of above,
+    // but its intentional, as below 2 are used by FE cos of gas approximation issue explianed elsewhere
     function isSafeHavenOwner(address _wallet, uint256 _tokenId)
         public
         view
@@ -152,7 +168,7 @@ contract Flower is ERC721Enumerable, Ownable {
     }
 
     // function to determine if sender is open-edition collector
-    // open edition collector = holderOfTimePieceCommunity or holderOfBuildABetterFuture
+    // FYI: Last minute change made this not be used on FE as etherjs couldnot auto detect gas fees,
     function isOpenEditionCollector(address _wallet)
         public
         view
@@ -171,7 +187,6 @@ contract Flower is ERC721Enumerable, Ownable {
         return (isHolder, _safeHavenTokenId, _graceIITokenId);
     }
 
-    // function to allow 1 of 1 holder collector mint
     function mint1Of1Holder(address _wallet) external whenMintOpened {
         require(
             oneOfOneMintList[_wallet] == false,
@@ -197,7 +212,6 @@ contract Flower is ERC721Enumerable, Ownable {
         emit LogMintOneOfOneHolder(_wallet, tokenId);
     }
 
-    // function to allow non-collector mint
     function mintNonCollector(address _wallet) external whenMintOpened {
         require(
             nonCollectorsMintList[_wallet] == false,
@@ -223,7 +237,6 @@ contract Flower is ERC721Enumerable, Ownable {
         emit LogMintNonCollector(_wallet, tokenId);
     }
 
-    // function to allow open-edition collector mint
     function mintOpenEdition(address _wallet) external whenMintOpened {
         (
             bool isHolder,
@@ -237,7 +250,6 @@ contract Flower is ERC721Enumerable, Ownable {
             "Wallet minted already before for this category"
         );
 
-        // Todod: store a mapping ( openEditionTOkenId => bool )
         require(
             openEditionCollectorsMintedCount <= 54,
             "INTERNAL ERROR: Reached max tokens allowed for this category"

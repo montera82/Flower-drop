@@ -16,7 +16,7 @@ truffle test
 
 
 ### Open sea Collection
-
+RINKEBY: https://testnets.opensea.io/collection/flowers-15s8qi9aqv
 
 
 # Project Resources
