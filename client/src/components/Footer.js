@@ -20,7 +20,7 @@ export default function Footer() {
             <p>
               All copyright © reserved by{' '}
               <a target="_blank" rel="noreferrer" href="https://www.lethabohuma.com">
-              Lethal huma & HUMA Studios
+              Lethabo huma & HUMA Studios
               </a>{' '}
               2021
             </p>
