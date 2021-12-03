@@ -33,7 +33,7 @@ export default function Footer() {
               2021
             </p>
             <p>
-              Smart contract written and deployed by{' '}
+              Smartcontract written and deployed by{' '}
               <a
                 style={{ fontWeight: 500 }}
                 target="_blank"
