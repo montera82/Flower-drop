@@ -155,7 +155,7 @@ export default function Gallery() {
                 <div className="portfolio-thumb">
                   <img src="img/portfolio/The Gift (Formerly Known as Flower 1).JPG" alt="" />
                   <div className="view-icon">
-                    <a href="portfolio-single.html">
+                    <a target="blank" href="https://opensea.io/collection/florescence">
                       <i className="ion-arrow-right-c"></i>
                     </a>
                   </div>
@@ -200,7 +200,7 @@ export default function Gallery() {
                     alt=""
                   />
                   <div className="view-icon">
-                    <a href="portfolio-single.html">
+                  <a target="blank" href="https://opensea.io/collection/florescence">
                       <i className="ion-arrow-right-c"></i>
                     </a>
                   </div>
