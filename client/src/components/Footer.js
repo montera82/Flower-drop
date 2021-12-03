@@ -17,12 +17,12 @@ export default function Footer() {
             </a>
           </div>
           <div className="footer-menu mt-30">
-						<nav>
+						{/* <nav>
 							<ul>
-								<li><a target="_blank"  rel="noreferrer"  href="https://opensea.io/collection/florescence">OpenSea</a></li>
-								<li><a target="_blank"  rel="noreferrer" href="https://etherscan.io/address/0xcf94f9a9add6205718750acff8e4fd1084dcf0f8">Verified Contract</a></li>
+								<li><a target="_blank"  rel="noreferrer"  href="https://opensea.io/collection/">OpenSea</a></li>
+								<li><a target="_blank"  rel="noreferrer" href="https://etherscan.io/address/0xcf94f9a9add6205718750acff8e4fd1084dcf0f9">Verified Contract</a></li>
 							</ul>
-						</nav>
+						</nav> */}
 					</div>
           <div className="copyright mt-20">
             <p>
