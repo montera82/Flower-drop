@@ -16,7 +16,7 @@ export default function Footer() {
               <i className="ion-social-twitter"></i>
             </a>
           </div>
-          <div class="footer-menu mt-30">
+          <div className="footer-menu mt-30">
 						<nav>
 							<ul>
 								<li><a target="_blank"  href="https://opensea.io/collection/florescence">OpenSea</a></li>
@@ -33,7 +33,7 @@ export default function Footer() {
               2021
             </p>
             <p>
-              Smartcontract written and deployed by{' '}
+              Smart contract written and deployed by{' '}
               <a
                 style={{ fontWeight: 500 }}
                 target="_blank"
