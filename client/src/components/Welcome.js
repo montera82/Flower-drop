@@ -11,7 +11,7 @@ export default function Welcome() {
         <Alert />
         <div className="container">
           <div style={{ paddingTop: '100px' }} className="slider-content text-center">
-            <h3 className="mb-30">My Happy Collection</h3>
+            <h3 className="mb-30">Florescence</h3>
             <p style={{ marginBottom: 0, textTransform: 'none' }}>
               For those who believe in my art and gift.
             </p>
