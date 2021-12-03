@@ -165,7 +165,7 @@ export default function Gallery() {
                     <p>The Gift</p>
                   </div>
                   <h4>
-                    <a href="portfolio-single.html">One of One Collectors</a>
+                    
                   </h4>
                 </div>
               </div>
@@ -210,7 +210,7 @@ export default function Gallery() {
                     <p>Pillar of Love</p>
                   </div>
                   <h4>
-                    <a href="portfolio-single.html">Non Collectors</a>
+                    
                   </h4>
                 </div>
               </div>
@@ -249,7 +249,7 @@ export default function Gallery() {
                     <p>Purple Haven</p>
                   </div>
                   <h4>
-                    <a href="portfolio-single.html">Open Edition Collectors</a>
+                    
                   </h4>
                 </div>
               </div>
