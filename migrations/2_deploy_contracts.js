@@ -10,9 +10,9 @@ const Flower = artifacts.require("Flower");
 // MAINNET
 const baseURI = "https://gateway.pinata.cloud/ipfs/QmRu5rKug5rUMnn7s6kP9uPy7meZcSTMZhpTGt5rk6w8Uj/"; 
 const buildABetterFutureContract =
-    "0xdd69da9a83cedc730bc4d3c56e96d29acc05ecde";
+    "0xDd69da9a83ceDc730bc4d3C56E96D29Acc05eCDE";
 const timePieceCommunityContract =
-    "0x9307edc4f23d87f9783a999f870b728ab9d34fe5";
+    "0x9307EDC4f23D87f9783a999f870B728AB9D34FE5";
 
 module.exports = function (deployer) {
     deployer.deploy(Flower, baseURI, buildABetterFutureContract, timePieceCommunityContract);
