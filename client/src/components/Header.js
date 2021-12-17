@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 export default function Header() {
   const { account, metaMaskInstalled, setAccount, setChainId, setShowModal } = useAppContext();
 
-  async function connectWallet(e) {
+  async function connectMetamaskWallet(e) {
     e.preventDefault();
     try {
       const accounts = await window.ethereum
@@ -29,6 +29,18 @@ export default function Header() {
       localStorage.setItem('accountData', JSON.stringify({ account: accounts[0] }));
     } catch (e) {
       toast('MetaMask not found, please install and try again.');
+    }
+  }
+
+  async function connectWalletConnect(e) {
+    e.preventDefault();
+    try {
+      await window.walletConnectProvider.enable();
+      // setAccount(accounts[0]);
+      // localStorage.setItem('accountData', JSON.stringify({ account: accounts[0] }));
+    } catch (e) {
+      console.log('WALLET CONNECT',e)
+      toast('Wallet connect issues');
     }
   }
 
@@ -94,24 +106,32 @@ export default function Header() {
                 </h4>
               </div>
               <div className="basic-menu">
-                {account ? (
-                  <>
+                <li>
+                  <a>Connect Wallet</a>
+                  <ul>
                     <li>
-                      <a style={{ fontWeight: 700, pointerEvents: 'none' }}>
-                        {shortenAddress(account, 4)}
-                      </a>
+                      {account ? (
+                        <>
+                          <li>
+                            <a style={{ fontWeight: 700, pointerEvents: 'none' }}>
+                              {shortenAddress(account, 4)}
+                            </a>
+                          </li>
+                          <li>
+                            <a onClick={disconnectWallet}>Logout</a>
+                          </li>
+                        </>
+                      ) : (
+                        <li>
+                          <a onClick={connectMetamaskWallet} style={{ fontWeight: 700, color: '#e90607' }}>
+                            MetaMask
+                          </a>
+                        </li>
+                      )}
                     </li>
-                    <li>
-                      <a onClick={disconnectWallet}>Logout</a>
-                    </li>
-                  </>
-                ) : (
-                  <li>
-                    <a onClick={connectWallet} style={{ fontWeight: 700, color: '#e90607' }}>
-                      Connect Wallet
-                    </a>
-                  </li>
-                )}
+                    <li><a onClick={connectWalletConnect} >WalletConnect</a></li>
+                  </ul>
+                </li>
               </div>
             </div>
           </div>
