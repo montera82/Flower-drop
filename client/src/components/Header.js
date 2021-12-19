@@ -1,11 +1,15 @@
 import { useEffect } from 'react';
+// import { ethers } from 'ethers';
 import { Link } from 'react-router-dom';
+// import WalletConnectProvider from '@walletconnect/web3-provider';
 import { shortenAddress } from '../utils/shortenAddress';
 import { useAppContext } from '../AppContext';
 import { toast } from 'react-toastify';
+import { getWallectConnectProvider, setupEvents } from '../utils/walletConnect';
 
 export default function Header() {
-  const { account, metaMaskInstalled, setAccount, setChainId, setShowModal } = useAppContext();
+  const { account, metaMaskInstalled, client, setAccount, setChainId, setShowModal } =
+    useAppContext();
 
   async function connectMetamaskWallet(e) {
     e.preventDefault();
@@ -26,6 +30,7 @@ export default function Header() {
         );
       // const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       setAccount(accounts[0]);
+      localStorage.setItem('matamask', true);
       localStorage.setItem('accountData', JSON.stringify({ account: accounts[0] }));
     } catch (e) {
       toast('MetaMask not found, please install and try again.');
@@ -35,11 +40,17 @@ export default function Header() {
   async function connectWalletConnect(e) {
     e.preventDefault();
     try {
+      if (!window.walletConnectProvider) {
+        getWallectConnectProvider();
+      }
+
       await window.walletConnectProvider.enable();
-      // setAccount(accounts[0]);
-      // localStorage.setItem('accountData', JSON.stringify({ account: accounts[0] }));
+      setupEvents();
+
+      window.location.reload();
+      localStorage.setItem('wallectconnect', true);
     } catch (e) {
-      console.log('WALLET CONNECT',e)
+      console.log('WALLET CONNECT', e);
       toast('Wallet connect issues');
     }
   }
@@ -47,16 +58,36 @@ export default function Header() {
   async function disconnectWallet(e) {
     e.preventDefault();
     try {
-      setAccount(null);
-      localStorage.setItem('accountData', JSON.stringify({ account: null }));
+      if (client === 'MetaMask') {
+        setAccount(null);
+        localStorage.setItem('accountData', JSON.stringify({ account: null }));
+        return;
+      }
+
+      if (window.walletConnectProvider) {
+        await window.walletConnectProvider.disconnect();
+        return;
+      }
+
+      localStorage.clear();
+      window.location.reload();
     } catch (e) {
+      console.log(e);
       window.alert('Error disconnecting MetaMask');
     }
   }
 
   useEffect(async () => {
     const accountData = JSON.parse(localStorage.getItem('accountData'));
-    accountData && setAccount(accountData.account);
+    const walletConnnect = JSON.parse(localStorage.getItem('walletconnect'));
+
+    if (walletConnnect) {
+      setAccount(walletConnnect.accounts[0]);
+    } else if (accountData && accountData.account) {
+      setAccount(accountData.account);
+    } else {
+      setAccount(null);
+    }
 
     if (metaMaskInstalled && account) {
       const chainId = await window.ethereum.request({ method: 'eth_chainId' });
@@ -107,29 +138,39 @@ export default function Header() {
               </div>
               <div className="basic-menu">
                 <li>
-                  <a>Connect Wallet</a>
+                  <a>
+                    {account ? (
+                      <li>
+                        <a style={{ fontWeight: 700, pointerEvents: 'none' }}>
+                          {shortenAddress(account, 4)}
+                        </a>
+                      </li>
+                    ) : (
+                      'Connect Wallet'
+                    )}
+                  </a>
                   <ul>
-                    <li>
-                      {account ? (
-                        <>
-                          <li>
-                            <a style={{ fontWeight: 700, pointerEvents: 'none' }}>
-                              {shortenAddress(account, 4)}
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={disconnectWallet}>Logout</a>
-                          </li>
-                        </>
-                      ) : (
+                    {account ? (
+                      <li>
+                        <a onClick={disconnectWallet} style={{ fontWeight: 700, color: '#e90607' }}>
+                          Logout
+                        </a>
+                      </li>
+                    ) : (
+                      <>
                         <li>
-                          <a onClick={connectMetamaskWallet} style={{ fontWeight: 700, color: '#e90607' }}>
+                          <a onClick={connectMetamaskWallet} style={{ fontWeight: 700 }}>
                             MetaMask
                           </a>
                         </li>
-                      )}
-                    </li>
-                    <li><a onClick={connectWalletConnect} >WalletConnect</a></li>
+
+                        <li>
+                          <a onClick={connectWalletConnect} style={{ fontWeight: 700 }}>
+                            WalletConnect
+                          </a>
+                        </li>
+                      </>
+                    )}
                   </ul>
                 </li>
               </div>

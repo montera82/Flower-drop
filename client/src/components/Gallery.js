@@ -9,7 +9,7 @@ export default function Gallery() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [emailMessage, setEmailMessage] = useState('');
-  const { account } = useAppContext();
+  const { account, client, setAccount } = useAppContext();
   const {
     mintingOneOfOne,
     mintingNonCollector,
@@ -21,15 +21,15 @@ export default function Gallery() {
     hasMintedNonCollection,
     hasMintedOpenEditionCollection,
     fetchIsOneOfOneCollector,
-    fetchIsNonCollector,
-    fetchIsOpenEditionCollector,
-    fetchHasMintedOneOfOneCollection,
-    fetchHasMintedNonCollection,
-    fetchHasMintedOpenEditionCollection,
+    // fetchIsNonCollector,
+    // fetchIsOpenEditionCollector,
+    // fetchHasMintedOneOfOneCollection,
+    // fetchHasMintedNonCollection,
+    // fetchHasMintedOpenEditionCollection,
     mintOneOfOneCollection,
     mintNonCollectorCollection,
     mintOpenEditionCollection
-  } = useFlower();
+  } = useFlower(client);
 
   const text =
     messages[account] ||
@@ -78,13 +78,24 @@ export default function Gallery() {
     }
   };
   useEffect(() => {
+    const accountData = JSON.parse(localStorage.getItem('accountData'));
+    const walletConnnect = JSON.parse(localStorage.getItem('walletconnect'));
+
+    if (walletConnnect) {
+      setAccount(walletConnnect.accounts[0]);
+    } else if (accountData && accountData.account) {
+      setAccount(accountData.account);
+    } else {
+      setAccount(null);
+    }
+
     if (account) {
       fetchIsOneOfOneCollector(account);
-      fetchIsNonCollector(account);
-      fetchIsOpenEditionCollector(account);
-      fetchHasMintedOneOfOneCollection(account);
-      fetchHasMintedNonCollection(account);
-      fetchHasMintedOpenEditionCollection(account);
+      // fetchIsNonCollector(account);
+      // fetchIsOpenEditionCollector(account);
+      // fetchHasMintedOneOfOneCollection(account);
+      // fetchHasMintedNonCollection(account);
+      // fetchHasMintedOpenEditionCollection(account);
     }
   }, [account]);
 
@@ -164,9 +175,7 @@ export default function Gallery() {
                   <div className="work-tag">
                     <p>The Gift</p>
                   </div>
-                  <h4>
-                    
-                  </h4>
+                  <h4></h4>
                 </div>
               </div>
 
@@ -200,7 +209,7 @@ export default function Gallery() {
                     alt=""
                   />
                   <div className="view-icon">
-                  {/* <a target="blank" href="https://opensea.io/collection/">
+                    {/* <a target="blank" href="https://opensea.io/collection/">
                       <i className="ion-arrow-right-c"></i>
                     </a> */}
                   </div>
@@ -209,9 +218,7 @@ export default function Gallery() {
                   <div className="work-tag">
                     <p>Pillar of Love</p>
                   </div>
-                  <h4>
-                    
-                  </h4>
+                  <h4></h4>
                 </div>
               </div>
 
@@ -248,9 +255,7 @@ export default function Gallery() {
                   <div className="work-tag">
                     <p>Purple Haven</p>
                   </div>
-                  <h4>
-                    
-                  </h4>
+                  <h4></h4>
                 </div>
               </div>
               {

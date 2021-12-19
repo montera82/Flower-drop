@@ -1,6 +1,8 @@
 import React, { createContext, useReducer } from 'react';
 
 const initialContext = {
+  client: null,
+  setClient: () => {},
   showModal: false,
   setShowModal: () => {},
   metaMaskInstalled: false,
@@ -31,6 +33,11 @@ const initialContext = {
 
 const appReducer = (state, { type, payload }) => {
   switch (type) {
+    case 'SET_CLIENT':
+      return {
+        ...state,
+        client: payload
+      };
     case 'SHOW_MODAL':
       return {
         ...state,
@@ -110,6 +117,14 @@ export const AppContextProvider = ({ children }) => {
   const [store, dispatch] = useReducer(appReducer, initialContext);
 
   const contextValue = {
+    client: localStorage.getItem('walletconnect')
+      ? 'WalletConnect'
+      : localStorage.getItem('matamask')
+      ? 'MetaMask'
+      : store.client,
+    setClient: (result) => {
+      dispatch({ type: 'SET_CLIENT', payload: result });
+    },
     showModal: store.showModal,
     setShowModal: (result) => {
       dispatch({ type: 'SHOW_MODAL', payload: result });

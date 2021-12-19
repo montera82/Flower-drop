@@ -3,7 +3,7 @@ import Flower from '../contracts/Flower.json';
 import { useAppContext } from '../AppContext';
 import { useContract } from './useContract';
 
-export const useFlower = () => {
+export const useFlower = (client = 'MetaMask') => {
   const {
     mintingOneOfOne,
     mintingNonCollector,
@@ -25,9 +25,10 @@ export const useFlower = () => {
     setHasMintedOpenEditionCollection
   } = useAppContext();
 
-  // const flowerContractAddress = '0x1ED866f17bD8bE57fb4E0f38B315E24309484D7E'; // Rinkeby
-  const flowerContractAddress = '0xcf94f9a9add6205718750acff8e4fd1084dcf0f8'; // Mainnet
-  const flowerContract = useContract(flowerContractAddress, Flower.abi);
+  // const flowerContractAddress = '0xAb500B7cACA0Eb1DEB905935BAb181EB3c946cEA'; // Ganache
+  const flowerContractAddress = '0x1ED866f17bD8bE57fb4E0f38B315E24309484D7E'; // Rinkeby
+  // const flowerContractAddress = '0xcf94f9a9add6205718750acff8e4fd1084dcf0f8'; // Mainnet
+  const flowerContract = useContract(flowerContractAddress, Flower.abi, client);
 
   const fetchIsOneOfOneCollector = async (address) => {
     try {
@@ -41,10 +42,12 @@ export const useFlower = () => {
 
   const fetchIsNonCollector = async (address) => {
     try {
+      console.log(flowerContract, '----------->');
       const isNonCollector = await flowerContract.isNonCollector(address);
+      console.log(isNonCollector, 'isNoncollector==============>');
       setIsNonCollector(isNonCollector);
     } catch (e) {
-      console.log(e.message, 'Error fetching isNonCollector');
+      console.log(e, 'Error fetching isNonCollector ------------------------>');
       toast(e.message);
     }
   };
