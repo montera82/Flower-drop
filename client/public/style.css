@@ -327,6 +327,7 @@ h1.breadcrumb-2 {
 }
 .basic-menu {
   float: right;
+  cursor:default;
 }
 .basic-menu li {
   float: left;
