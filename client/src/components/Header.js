@@ -1,33 +1,62 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Web3Modal from 'web3modal';
+import WalletConnectProvider from '@walletconnect/web3-provider';
 import { shortenAddress } from '../utils/shortenAddress';
 import { useAppContext } from '../AppContext';
 import { toast } from 'react-toastify';
 
 export default function Header() {
-  const { account, metaMaskInstalled, setAccount, setChainId, setShowModal } = useAppContext();
+  const { account, web3ModalProvider, setAccount, setChainId, setWeb3ModalProvider } =
+    useAppContext();
+
+  const web3modal = new Web3Modal({
+    network: 'rinkeby',
+    cacheProvider: true,
+    disableInjectedProvider: false,
+    providerOptions: {
+      walletconnect: {
+        package: WalletConnectProvider,
+        options: {
+          infuraId: 'd4b1560fd5a843449b473df3d7107963'
+        }
+      }
+    }
+  });
+
+  function setEventListeners(provider) {
+    // Subscribe to accounts change
+    provider.on('accountsChanged', (accounts) => {
+      console.log(accounts);
+      setAccount(accounts[0]);
+    });
+
+    // Subscribe to chainId change
+    provider.on('chainChanged', () => {
+      window.location.reload();
+    });
+
+    // Subscribe to provider connection
+    provider.on('connect', () => {
+      toast('Connected!');
+    });
+
+    // Subscribe to provider disconnection
+    provider.on('disconnect', (error) => {
+      toast(error);
+    });
+  }
 
   async function connectWallet(e) {
     e.preventDefault();
+
     try {
-      const accounts = await window.ethereum
-        .request({
-          method: 'wallet_requestPermissions',
-          params: [
-            {
-              eth_accounts: {}
-            }
-          ]
-        })
-        .then(() =>
-          window.ethereum.request({
-            method: 'eth_requestAccounts'
-          })
-        );
-      // const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      setAccount(accounts[0]);
-      localStorage.setItem('accountData', JSON.stringify({ account: accounts[0] }));
+      const provider = await web3modal.connect();
+      setWeb3ModalProvider(provider);
+      setAccount(provider.accounts ? provider.accounts[0] : provider.selectedAddress);
+      setEventListeners(provider);
     } catch (e) {
+      console.log(e);
       toast('MetaMask not found, please install and try again.');
     }
   }
@@ -36,42 +65,25 @@ export default function Header() {
     e.preventDefault();
     try {
       setAccount(null);
-      localStorage.setItem('accountData', JSON.stringify({ account: null }));
+      localStorage.clear();
     } catch (e) {
       window.alert('Error disconnecting MetaMask');
     }
   }
 
   useEffect(async () => {
-    const accountData = JSON.parse(localStorage.getItem('accountData'));
-    accountData && setAccount(accountData.account);
-
-    if (metaMaskInstalled && account) {
-      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-      setChainId(chainId);
-
-      // Listen for account and chain change events
-      const handleAccountChange = (account) => {
-        const newAccount = account[0] || null;
-        setAccount(newAccount);
-        localStorage.setItem('accountData', JSON.stringify({ account: newAccount }));
-        setTimeout(() => {
-          setShowModal(true);
-        }, 2000);
-      };
-      const handleChainChange = () => {
-        window.location.reload();
-      };
-      window.ethereum.on('accountsChanged', handleAccountChange);
-      window.ethereum.on('chainChanged', handleChainChange);
-
-      // Remove listeners on component unmount
-      return function cleanupListener() {
-        window.ethereum.removeListener('accountsChanged', handleAccountChange);
-        window.ethereum.removeListener('chainChanged', handleChainChange);
-      };
+    if (!account && web3modal.cachedProvider) {
+      const provider = await web3modal.connect();
+      setWeb3ModalProvider(provider);
+      setAccount(provider.accounts ? provider.accounts[0] : provider.selectedAddress);
+      setEventListeners(provider);
+      console.log(provider);
     }
-  }, [metaMaskInstalled, account]);
+
+    if (web3ModalProvider && account) {
+      setChainId(web3ModalProvider.chainId);
+    }
+  }, [account]);
 
   return (
     <header id="sticky-header">
