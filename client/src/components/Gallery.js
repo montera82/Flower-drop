@@ -164,9 +164,7 @@ export default function Gallery() {
                   <div className="work-tag">
                     <p>The Gift</p>
                   </div>
-                  <h4>
-                    
-                  </h4>
+                  <h4></h4>
                 </div>
               </div>
 
@@ -200,7 +198,7 @@ export default function Gallery() {
                     alt=""
                   />
                   <div className="view-icon">
-                  {/* <a target="blank" href="https://opensea.io/collection/">
+                    {/* <a target="blank" href="https://opensea.io/collection/">
                       <i className="ion-arrow-right-c"></i>
                     </a> */}
                   </div>
@@ -209,9 +207,7 @@ export default function Gallery() {
                   <div className="work-tag">
                     <p>Pillar of Love</p>
                   </div>
-                  <h4>
-                    
-                  </h4>
+                  <h4></h4>
                 </div>
               </div>
 
@@ -248,9 +244,7 @@ export default function Gallery() {
                   <div className="work-tag">
                     <p>Purple Haven</p>
                   </div>
-                  <h4>
-                    
-                  </h4>
+                  <h4></h4>
                 </div>
               </div>
               {

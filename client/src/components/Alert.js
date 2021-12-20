@@ -1,29 +1,16 @@
-import React, { useEffect } from 'react';
-import detectEthereumProvider from '@metamask/detect-provider';
+import React from 'react';
 import { useAppContext } from '../AppContext';
 
 export default function Alert() {
-  const { metaMaskInstalled, chainId, setMetaMaskInstalled } = useAppContext();
+  const { chainId } = useAppContext();
 
-  useEffect(async () => {
-    const provider = await detectEthereumProvider();
-    const isSet = provider && true;
-    setMetaMaskInstalled(isSet);
-  }, []);
-
-  console.log(metaMaskInstalled, 'metamask installed');
   return (
     <div
       className="alert"
       style={{
-        visibility:
-          (chainId === null || chainId === '0x1') && metaMaskInstalled ? 'hidden' : 'visible'
+        visibility: chainId === null || chainId === '0x1' || chainId === 1 ? 'hidden' : 'visible'
       }}>
-      {!metaMaskInstalled
-        ? 'Please install MetaMask to continue'
-        : chainId !== '0x1'
-        ? 'Please change your network to Ethereum Mainnet'
-        : ''}
+      {'Please change your network to Ethereum Mainnet'}
     </div>
   );
 }

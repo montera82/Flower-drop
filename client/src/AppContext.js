@@ -1,6 +1,8 @@
 import React, { createContext, useReducer } from 'react';
 
 const initialContext = {
+  web3ModalProvider: null,
+  setWeb3ModalProvider: () => {},
   showModal: false,
   setShowModal: () => {},
   metaMaskInstalled: false,
@@ -31,6 +33,11 @@ const initialContext = {
 
 const appReducer = (state, { type, payload }) => {
   switch (type) {
+    case 'SET_WEB3_MODAL_PROVIDER':
+      return {
+        ...state,
+        web3ModalProvider: payload
+      };
     case 'SHOW_MODAL':
       return {
         ...state,
@@ -110,6 +117,10 @@ export const AppContextProvider = ({ children }) => {
   const [store, dispatch] = useReducer(appReducer, initialContext);
 
   const contextValue = {
+    web3ModalProvider: store.web3ModalProvider,
+    setWeb3ModalProvider: (result) => {
+      dispatch({ type: 'SET_WEB3_MODAL_PROVIDER', payload: result });
+    },
     showModal: store.showModal,
     setShowModal: (result) => {
       dispatch({ type: 'SHOW_MODAL', payload: result });
