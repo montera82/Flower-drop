@@ -17,7 +17,9 @@ truffle test
 
 ### Open sea Collection
 RINKEBY: https://testnets.opensea.io/collection/flowers-15s8qi9aqv
+
 VERIFIED CONTRACT:  https://etherscan.io/address/0xcf94f9a9add6205718750acff8e4fd1084dcf0f8
+
 MINT PAGE: https://my-happy-collection.herokuapp.com/
 
 
